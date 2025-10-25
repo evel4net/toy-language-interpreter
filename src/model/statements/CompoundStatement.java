@@ -1,6 +1,7 @@
 package model.statements;
 
-import model.adt.stack.IADTStack;
+import model.exceptions.ProgramException;
+import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
 
 public class CompoundStatement implements Statement {
@@ -13,7 +14,7 @@ public class CompoundStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) {
-        IADTStack<Statement> executionStack = state.getExecutionStack();
+        ExecutionStack executionStack = state.getExecutionStack();
 
         executionStack.push(this.secondStatement);
         executionStack.push(this.firstStatement);

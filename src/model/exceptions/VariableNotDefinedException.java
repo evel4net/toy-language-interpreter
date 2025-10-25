@@ -1,6 +1,6 @@
-package model.expressions.exceptions;
+package model.exceptions;
 
-public class VariableNotDefinedException extends ExpressionException {
+public class VariableNotDefinedException extends ProgramException {
     public VariableNotDefinedException(String variableName) {
         super("Variable " + variableName + " is not defined.");
     }

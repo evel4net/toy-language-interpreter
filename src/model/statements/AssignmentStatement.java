@@ -1,10 +1,11 @@
 package model.statements;
 
-import model.adt.dictionary.IADTDictionary;
-import model.adt.dictionary.KeyNotDefinedException;
 import model.expressions.Expression;
-import model.expressions.exceptions.ExpressionException;
+import model.exceptions.ProgramException;
+import model.exceptions.InvalidTypeException;
+import model.exceptions.VariableNotDefinedException;
 import model.program_state.ProgramState;
+import model.program_state.SymbolsTable;
 import model.types.Type;
 import model.values.Value;
 
@@ -18,19 +19,17 @@ public class AssignmentStatement implements Statement {
     }
 
     @Override
-    public ProgramState execute(ProgramState state) throws ExpressionException, StatementException {
-        IADTDictionary<String, Value> symbolsTable = state.getSymbolsTable();
+    public ProgramState execute(ProgramState state) throws ProgramException {
+        SymbolsTable symbolsTable = state.getSymbolsTable();
+
+        if (!symbolsTable.isVariableDefined(this.name)) throw new VariableNotDefinedException(this.name);
+
         Value expressionValue = this.expression.evaluate(symbolsTable);
 
-        try {
-            Type variableType = symbolsTable.get(this.name).getType();
-            if (!(expressionValue.getType().equals(variableType)))
-                throw new StatementException("Assignment type mismatch with variable type.");
+        Type variableType = symbolsTable.getVariableType(this.name);
+        if (!(expressionValue.getType().equals(variableType))) throw new InvalidTypeException("Assignment type mismatch with variable type.");
 
-            symbolsTable.update(this.name, expressionValue);
-        } catch (KeyNotDefinedException e) {
-            throw new StatementException("Variable " + this.name + " is not declared.");
-        }
+        symbolsTable.updateVariableValue(this.name, expressionValue);
 
         return state;
     }

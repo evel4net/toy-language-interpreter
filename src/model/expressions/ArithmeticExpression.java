@@ -1,10 +1,10 @@
 package model.expressions;
 
-import model.adt.dictionary.IADTDictionary;
-import model.expressions.exceptions.DivisionByZeroException;
-import model.expressions.exceptions.ExpressionException;
-import model.expressions.exceptions.IncorrectOperandTypeException;
-import model.expressions.exceptions.IncorrectOperatorException;
+import model.exceptions.DivisionByZeroException;
+import model.exceptions.ProgramException;
+import model.exceptions.InvalidTypeException;
+import model.exceptions.IncorrectOperatorException;
+import model.program_state.SymbolsTable;
 import model.types.IntType;
 import model.values.IntValue;
 import model.values.Value;
@@ -20,31 +20,34 @@ public class ArithmeticExpression implements Expression {
     }
 
     @Override
-    public Value evaluate(IADTDictionary<String, Value> symbolsTable) throws ExpressionException {
+    public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
         Value valueLeft, valueRight;
 
         valueLeft = this.expressionLeft.evaluate(symbolsTable);
-        if (!(valueLeft.getType() instanceof IntType)) throw new IncorrectOperandTypeException("First operand is not an integer.");
+        if (!(valueLeft.getType() instanceof IntType)) throw new InvalidTypeException("First operand is not an integer.");
 
         valueRight = this.expressionRight.evaluate(symbolsTable);
-        if (!(valueRight.getType() instanceof IntType)) throw new IncorrectOperandTypeException("Second operand is not an integer.");
+        if (!(valueRight.getType() instanceof IntType)) throw new InvalidTypeException("Second operand is not an integer.");
 
         int numberLeft = ((IntValue) valueLeft).getValue();
         int numberRight = ((IntValue) valueRight).getValue();
 
-        switch (this.operator) {
-            case '+':
-                return new IntValue(numberLeft + numberRight);
-            case '-':
-                return new IntValue(numberLeft - numberRight);
-            case '*':
-                return new IntValue(numberLeft * numberRight);
-            case '/':
-                if (numberRight == 0) throw new DivisionByZeroException();
-                return new IntValue(numberLeft / numberRight);
-            default:
-                throw new IncorrectOperatorException(String.valueOf(this.operator));
-        }
+
+        int result = switch (this.operator) {
+            case '+' -> (numberLeft + numberRight);
+            case '-' -> (numberLeft - numberRight);
+            case '*' -> (numberLeft * numberRight);
+            case '/' -> this.divideOperation(numberLeft, numberRight);
+            default -> throw new IncorrectOperatorException(String.valueOf(this.operator));
+        };
+
+        return new IntValue(result);
+    }
+
+    private int divideOperation(int numberLeft, int numberRight) {
+        if (numberRight == 0) throw new DivisionByZeroException();
+
+        return (numberLeft / numberRight);
     }
 
     @Override

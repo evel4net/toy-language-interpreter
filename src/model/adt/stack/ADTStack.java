@@ -4,16 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ADTStack<T> implements IADTStack<T> {
-    private final List<T> stack;
-
-    public ADTStack() {
-        this.stack = new LinkedList<>();
-    }
+    private final List<T> stack = new LinkedList<>();
 
     @Override
     public T pop() throws EmptyStackException {
         try {
-            return this.stack.remove(this.stack.size() - 1);
+            return this.stack.remove(0);
         } catch (IndexOutOfBoundsException e) {
             throw new EmptyStackException();
         }
@@ -21,13 +17,13 @@ public class ADTStack<T> implements IADTStack<T> {
 
     @Override
     public void push(T value) {
-        this.stack.add(value);
+        this.stack.add(0, value);
     }
 
     @Override
     public T top() throws EmptyStackException {
         try {
-            return this.stack.get(this.stack.size() - 1);
+            return this.stack.get(0);
         } catch (IndexOutOfBoundsException e) {
             throw new EmptyStackException();
         }

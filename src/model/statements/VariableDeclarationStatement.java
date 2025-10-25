@@ -1,9 +1,10 @@
 package model.statements;
 
-import model.adt.dictionary.IADTDictionary;
+import model.exceptions.ProgramException;
+import model.exceptions.VariableAlreadyDefinedException;
 import model.program_state.ProgramState;
+import model.program_state.SymbolsTable;
 import model.types.Type;
-import model.values.Value;
 
 public class VariableDeclarationStatement implements Statement {
     private final Type type;
@@ -15,12 +16,12 @@ public class VariableDeclarationStatement implements Statement {
     }
 
     @Override
-    public ProgramState execute(ProgramState state) throws StatementException {
-        IADTDictionary<String, Value> symbolsTable = state.getSymbolsTable();
+    public ProgramState execute(ProgramState state) throws ProgramException {
+        SymbolsTable symbolsTable = state.getSymbolsTable();
 
-        if (symbolsTable.exists(this.name)) throw new StatementException("Variable " + this.name + " was already declared.");
+        if (symbolsTable.isVariableDefined(this.name)) throw new VariableAlreadyDefinedException(this.name);
 
-        symbolsTable.insert(this.name, this.type.getDefaultValue());
+        symbolsTable.declareVariable(this.name, this.type);
 
         return state;
     }

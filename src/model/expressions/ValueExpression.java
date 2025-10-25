@@ -1,6 +1,7 @@
 package model.expressions;
 
 import model.adt.dictionary.IADTDictionary;
+import model.program_state.SymbolsTable;
 import model.values.Value;
 
 public class ValueExpression implements Expression {
@@ -11,7 +12,7 @@ public class ValueExpression implements Expression {
     }
 
     @Override
-    public Value evaluate(IADTDictionary<String, Value> symbolsTable) {
+    public Value evaluate(SymbolsTable symbolsTable) {
         return this.value;
     }
 

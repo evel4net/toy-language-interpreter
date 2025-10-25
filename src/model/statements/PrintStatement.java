@@ -1,7 +1,7 @@
 package model.statements;
 
 import model.expressions.Expression;
-import model.expressions.exceptions.ExpressionException;
+import model.exceptions.ProgramException;
 import model.program_state.ProgramState;
 
 public class PrintStatement implements Statement {
@@ -12,8 +12,8 @@ public class PrintStatement implements Statement {
     }
 
     @Override
-    public ProgramState execute(ProgramState state) throws ExpressionException {
-        state.getOutput().insertLast(this.expression.evaluate(state.getSymbolsTable()));
+    public ProgramState execute(ProgramState state) throws ProgramException {
+        state.getOutput().add(this.expression.evaluate(state.getSymbolsTable()));
 
         return state;
     }

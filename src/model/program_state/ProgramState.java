@@ -1,20 +1,16 @@
 package model.program_state;
 
-import model.adt.dictionary.IADTDictionary;
-import model.adt.list.IADTList;
-import model.adt.stack.IADTStack;
 import model.statements.Statement;
-import model.values.Value;
 
 public class ProgramState {
-    private IADTStack<Statement> executionStack;
-    private IADTDictionary<String, Value> symbolsTable;
-    private IADTList<Value> output;
+    private ExecutionStack executionStack;
+    private SymbolsTable symbolsTable;
+    private Output output;
     private final Statement originalProgram;
 
-    public ProgramState(IADTStack<Statement> executionStack,
-                        IADTDictionary<String, Value> symbolsTable,
-                        IADTList<Value> output,
+    public ProgramState(ExecutionStack executionStack,
+                        SymbolsTable symbolsTable,
+                        Output output,
                         Statement program) {
 
         this.executionStack = executionStack;
@@ -26,27 +22,27 @@ public class ProgramState {
         this.executionStack.push(program);
     }
 
-    public IADTStack<Statement> getExecutionStack() {
+    public ExecutionStack getExecutionStack() {
         return this.executionStack;
     }
 
-    public void setExecutionStack(IADTStack<Statement> executionStack) {
+    public void setExecutionStack(ExecutionStack executionStack) {
         this.executionStack = executionStack;
     }
 
-    public IADTDictionary<String, Value> getSymbolsTable() {
+    public SymbolsTable getSymbolsTable() {
         return this.symbolsTable;
     }
 
-    public void setSymbolsTable(IADTDictionary<String, Value> symbolsTable) {
+    public void setSymbolsTable(SymbolsTable symbolsTable) {
         this.symbolsTable = symbolsTable;
     }
 
-    public IADTList<Value> getOutput() {
+    public Output getOutput() {
         return this.output;
     }
 
-    public void setOutput(IADTList<Value> output) {
+    public void setOutput(Output output) {
         this.output = output;
     }
 

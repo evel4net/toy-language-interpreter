@@ -1,10 +1,9 @@
 package model.expressions;
 
-import model.adt.dictionary.IADTDictionary;
-import model.expressions.exceptions.DivisionByZeroException;
-import model.expressions.exceptions.ExpressionException;
-import model.expressions.exceptions.IncorrectOperandTypeException;
-import model.expressions.exceptions.IncorrectOperatorException;
+import model.exceptions.ProgramException;
+import model.exceptions.InvalidTypeException;
+import model.exceptions.IncorrectOperatorException;
+import model.program_state.SymbolsTable;
 import model.types.BoolType;
 import model.values.BoolValue;
 import model.values.Value;
@@ -22,34 +21,25 @@ public class LogicExpression implements Expression {
     }
 
     @Override
-    public Value evaluate(IADTDictionary<String, Value> symbolsTable) throws ExpressionException {
+    public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
         Value valueLeft, valueRight;
 
-        try {
-            valueLeft = this.expressionLeft.evaluate(symbolsTable);
-        } catch (DivisionByZeroException e) {
-            throw new IncorrectOperandTypeException("First operand is not a boolean.");
-        }
-        if (!(valueLeft.getType() instanceof BoolType)) throw new IncorrectOperandTypeException("First operand is not a boolean.");
+        valueLeft = this.expressionLeft.evaluate(symbolsTable);
+        if (!(valueLeft.getType() instanceof BoolType)) throw new InvalidTypeException("First operand is not a boolean.");
 
-        try {
-            valueRight = this.expressionRight.evaluate(symbolsTable);
-        } catch (DivisionByZeroException e) {
-            throw new IncorrectOperandTypeException("Second operand is not a boolean.");
-        }
-        if (!(valueRight.getType() instanceof BoolType)) throw new IncorrectOperandTypeException("Second operand is not a boolean.");
+        valueRight = this.expressionRight.evaluate(symbolsTable);
+        if (!(valueRight.getType() instanceof BoolType)) throw new InvalidTypeException("Second operand is not a boolean.");
 
         boolean boolLeft = ((BoolValue)valueLeft).getValue();
         boolean boolRight = ((BoolValue)valueRight).getValue();
 
-        switch (this.operator.toLowerCase(Locale.ROOT)) {
-            case "and":
-                return new BoolValue(boolLeft && boolRight);
-            case "or":
-                return new BoolValue(boolLeft || boolRight);
-            default:
-                throw new IncorrectOperatorException(this.operator);
-        }
+        boolean result = switch (this.operator.toLowerCase(Locale.ROOT)) {
+            case "and" -> (boolLeft && boolRight);
+            case "or" -> (boolLeft || boolRight);
+            default -> throw new IncorrectOperatorException(this.operator);
+        };
+
+        return new BoolValue(result);
     }
 
     @Override

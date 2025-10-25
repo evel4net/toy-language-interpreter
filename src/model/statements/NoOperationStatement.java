@@ -1,11 +1,12 @@
 package model.statements;
 
+import model.exceptions.ProgramException;
 import model.program_state.ProgramState;
 
 public class NoOperationStatement implements Statement {
 
     @Override
-    public ProgramState execute(ProgramState state) {
+    public ProgramState execute(ProgramState state) throws ProgramException {
         return state;
     }
 

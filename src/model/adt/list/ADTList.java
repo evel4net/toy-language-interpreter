@@ -1,14 +1,10 @@
 package model.adt.list;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ADTList<T> implements IADTList<T> {
-    private final List<T> list;
-
-    public ADTList() {
-        this.list = new LinkedList<>();
-    }
+    private final List<T> list = new ArrayList<>();
 
     @Override
     public void insert(int index, T value) throws InvalidIndexException {
@@ -26,7 +22,7 @@ public class ADTList<T> implements IADTList<T> {
 
     @Override
     public void insertLast(T value) {
-        this.list.add(this.list.size(), value);
+        this.list.add(value);
     }
 
     @Override
