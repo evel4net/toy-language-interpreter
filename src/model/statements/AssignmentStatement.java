@@ -10,11 +10,11 @@ import model.types.Type;
 import model.values.Value;
 
 public class AssignmentStatement implements Statement {
-    private final String name;
+    private final String variableName;
     private final Expression expression;
 
-    public AssignmentStatement(String name, Expression expression) {
-        this.name = name;
+    public AssignmentStatement(String variableName, Expression expression) {
+        this.variableName = variableName;
         this.expression = expression;
     }
 
@@ -22,25 +22,25 @@ public class AssignmentStatement implements Statement {
     public ProgramState execute(ProgramState state) throws ProgramException {
         SymbolsTable symbolsTable = state.getSymbolsTable();
 
-        if (!symbolsTable.isVariableDefined(this.name)) throw new VariableNotDefinedException(this.name);
+        if (!symbolsTable.isVariableDefined(this.variableName)) throw new VariableNotDefinedException(this.variableName);
 
         Value expressionValue = this.expression.evaluate(symbolsTable);
 
-        Type variableType = symbolsTable.getVariableType(this.name);
+        Type variableType = symbolsTable.getVariableType(this.variableName);
         if (!(expressionValue.getType().equals(variableType))) throw new InvalidTypeException("Assignment type mismatch with variable type.");
 
-        symbolsTable.updateVariableValue(this.name, expressionValue);
+        symbolsTable.updateVariableValue(this.variableName, expressionValue);
 
         return state;
     }
 
     @Override
     public Statement deepCopy() {
-        return new AssignmentStatement(this.name, this.expression);
+        return new AssignmentStatement(this.variableName, this.expression);
     }
 
     @Override
     public String toString() {
-        return this.name + " = " + this.expression.toString();
+        return this.variableName + " = " + this.expression.toString();
     }
 }

@@ -44,7 +44,7 @@ public class ArithmeticExpression implements Expression {
         return new IntValue(result);
     }
 
-    private int divideOperation(int numberLeft, int numberRight) {
+    private int divideOperation(int numberLeft, int numberRight) throws DivisionByZeroException {
         if (numberRight == 0) throw new DivisionByZeroException();
 
         return (numberLeft / numberRight);

@@ -6,21 +6,21 @@ import model.program_state.SymbolsTable;
 import model.values.Value;
 
 public class VariableExpression implements Expression {
-    private final String name;
+    private final String variableName;
 
-    public VariableExpression(String name) {
-        this.name = name;
+    public VariableExpression(String variableName) {
+        this.variableName = variableName;
     }
 
     @Override
     public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
-        if (!symbolsTable.isVariableDefined(this.name)) throw new VariableNotDefinedException(this.name);
+        if (!symbolsTable.isVariableDefined(this.variableName)) throw new VariableNotDefinedException(this.variableName);
 
-        return symbolsTable.getVariableValue(this.name);
+        return symbolsTable.getVariableValue(this.variableName);
     }
 
     @Override
     public String toString() {
-        return this.name;
+        return this.variableName;
     }
 }

@@ -1,6 +1,10 @@
 package model.adt.dictionary;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ADTDictionary<K, V> implements IADTDictionary<K, V> {
     private final Map<K, V> dictionary = new HashMap<>();

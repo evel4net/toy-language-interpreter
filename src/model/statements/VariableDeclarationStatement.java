@@ -8,31 +8,31 @@ import model.types.Type;
 
 public class VariableDeclarationStatement implements Statement {
     private final Type type;
-    private final String name;
+    private final String variableName;
 
-    public VariableDeclarationStatement(Type type, String name) {
+    public VariableDeclarationStatement(Type type, String variableName) {
         this.type = type;
-        this.name = name;
+        this.variableName = variableName;
     }
 
     @Override
     public ProgramState execute(ProgramState state) throws ProgramException {
         SymbolsTable symbolsTable = state.getSymbolsTable();
 
-        if (symbolsTable.isVariableDefined(this.name)) throw new VariableAlreadyDefinedException(this.name);
+        if (symbolsTable.isVariableDefined(this.variableName)) throw new VariableAlreadyDefinedException(this.variableName);
 
-        symbolsTable.declareVariable(this.name, this.type);
+        symbolsTable.declareVariable(this.variableName, this.type);
 
         return state;
     }
 
     @Override
     public Statement deepCopy() {
-        return new VariableDeclarationStatement(this.type, this.name);
+        return new VariableDeclarationStatement(this.type, this.variableName);
     }
 
     @Override
     public String toString() {
-        return this.type.toString() + " " + this.name;
+        return this.type.toString() + " " + this.variableName;
     }
 }
