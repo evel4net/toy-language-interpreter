@@ -3,7 +3,6 @@ package controller;
 import model.adt.stack.EmptyStackException;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
-import model.statements.IfStatement;
 import model.statements.Statement;
 import repository.IRepository;
 

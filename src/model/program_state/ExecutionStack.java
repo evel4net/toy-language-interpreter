@@ -19,4 +19,9 @@ public class ExecutionStack {
     public boolean isEmpty() {
         return this.stack.isEmpty();
     }
+
+    @Override
+    public String toString() {
+        return this.stack.toString();
+    }
 }

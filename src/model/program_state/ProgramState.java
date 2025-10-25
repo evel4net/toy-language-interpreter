@@ -47,7 +47,7 @@ public class ProgramState {
     }
 
     public Statement getOriginalProgram() {
-        return originalProgram;
+        return this.originalProgram;
     }
 
     @Override

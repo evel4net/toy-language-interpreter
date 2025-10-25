@@ -10,4 +10,9 @@ public class Output {
     public void add(Value value) {
         this.list.insertLast(value);
     }
+
+    @Override
+    public String toString() {
+        return this.list.toString();
+    }
 }

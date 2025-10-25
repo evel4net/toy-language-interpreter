@@ -28,4 +28,9 @@ public class SymbolsTable {
     public void updateVariableValue(String variableName, Value newValue) throws KeyNotDefinedException {
         this.table.update(variableName, newValue);
     }
+
+    @Override
+    public String toString() {
+        return this.table.toString();
+    }
 }

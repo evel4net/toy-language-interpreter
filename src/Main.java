@@ -15,6 +15,8 @@ import model.values.BoolValue;
 import model.values.IntValue;
 import repository.IRepository;
 import repository.Repository;
+import view.TextView;
+import view.IView;
 
 public class Main {
     public static void main(String[] args) {
@@ -75,18 +77,20 @@ public class Main {
                 )
         );
 
-        // ---
+        // -----
 
-        ExecutionStack executionStack = new ExecutionStack();
-        SymbolsTable symbolsTable = new SymbolsTable();
-        Output output = new Output();
-
-        ProgramState state = new ProgramState(executionStack, symbolsTable, output, example1);
+        ProgramState state1 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), example1);
+        ProgramState state2 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), example2);
+        ProgramState state3 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), example3);
 
         IRepository repository = new Repository();
-        repository.addProgramState(state);
+        repository.addProgramState(state1);
+        repository.addProgramState(state2);
+        repository.addProgramState(state3);
 
         IController controller = new Controller(repository, true);
-        controller.executeProgram();
+
+        IView view = new TextView(repository, controller);
+        view.start();
     }
 }
