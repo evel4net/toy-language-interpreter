@@ -3,7 +3,7 @@
 
 A toy language interpreter implemented in Java for the **Advanced Programming Methods** course at *Babeș-Bolyai University* during the first semester of second year (2025 - 2026).
 
-## Examples of programs
+## Program Examples
 ```
 int a;
 a=2+3*5;
