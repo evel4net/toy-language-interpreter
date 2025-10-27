@@ -84,11 +84,11 @@ public class Main {
         ProgramState state3 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), example3);
 
         IRepository repository = new Repository();
-        repository.addProgramState(state1);
-        repository.addProgramState(state2);
-        repository.addProgramState(state3);
 
         IController controller = new Controller(repository, true);
+        controller.addProgramState(state1);
+        controller.addProgramState(state2);
+        controller.addProgramState(state3);
 
         IView view = new TextView(repository, controller);
         view.start();

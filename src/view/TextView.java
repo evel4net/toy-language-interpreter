@@ -38,7 +38,8 @@ public class TextView implements IView {
                 case "0":
                     return;
                 case "1":
-                    this.inputProgram();
+                    this.chooseProgram();
+//                    this.inputProgram();
                     break;
                 default:
                     break;

@@ -16,6 +16,11 @@ public class Controller implements IController {
     }
 
     @Override
+    public void addProgramState(ProgramState state) {
+        this.repository.addProgramState(state);
+    }
+
+    @Override
     public ProgramState executeStep(ProgramState state) throws EmptyStackException {
         ExecutionStack executionStack = state.getExecutionStack();
 
