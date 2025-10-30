@@ -1,6 +1,7 @@
 package controller;
 
 import model.adt.stack.EmptyStackException;
+import model.exceptions.ProgramException;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
 import model.statements.Statement;
@@ -33,19 +34,26 @@ public class Controller implements IController {
     @Override
     public void executeProgram() {
         ProgramState currentProgramState = this.repository.getCurrentProgramState();
-        this.displayProgramState(currentProgramState);
+        if (currentProgramState == null) throw new ProgramException("There is no program to execute.");
+
+        this.repository.logProgramState();
 
         ExecutionStack executionStack = currentProgramState.getExecutionStack();
 
         while (!executionStack.isEmpty()) {
             this.executeStep(currentProgramState);
-            this.displayProgramState(currentProgramState);
+            this.repository.logProgramState();
         }
     }
 
     @Override
     public void setDisplayFlag(boolean status) {
         this.displayFlag = status;
+    }
+
+    @Override
+    public void setProgramLogFile(String logFileName) {
+        if (!logFileName.isEmpty()) this.repository.setLogFile(logFileName);
     }
 
     @Override

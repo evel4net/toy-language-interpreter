@@ -7,12 +7,12 @@ import repository.IRepository;
 
 import java.util.Scanner;
 
-public class TextView implements IView {
+public class ConsoleView {
     private final IRepository repository;
     private final IController controller;
     private final Scanner scanner = new Scanner(System.in);
 
-    public TextView(IRepository repository, IController controller) {
+    public ConsoleView(IRepository repository, IController controller) {
         this.repository = repository;
         this.controller = controller;
     }
@@ -24,8 +24,9 @@ public class TextView implements IView {
         System.out.println("0. Exit");
     }
 
-    @Override
     public void start() {
+        this.setLogFile();
+        // ---
         String userOption = "";
 
         while (true) {
@@ -45,6 +46,13 @@ public class TextView implements IView {
                     break;
             }
         }
+    }
+
+    private void setLogFile() {
+        System.out.print("Program log file name: ");
+        String logFileName = this.scanner.next();
+
+        this.controller.setProgramLogFile(logFileName);
     }
 
     private void inputProgram() {
@@ -68,9 +76,7 @@ public class TextView implements IView {
     }
 
     private void addNewProgram() {
-        System.out.println("--- New program");
-
-        //TODO
+        System.out.println("--- New program...");
     }
 
     private void chooseProgram() {

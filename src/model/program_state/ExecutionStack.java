@@ -24,4 +24,15 @@ public class ExecutionStack {
     public String toString() {
         return this.stack.toString();
     }
+
+    public String toLogFileString() {
+        String logFileEntry = "";
+
+        for (Statement s : this.stack.getAll()) {
+            logFileEntry += s.toString();
+            logFileEntry += "\n";
+        }
+
+        return logFileEntry;
+    }
 }

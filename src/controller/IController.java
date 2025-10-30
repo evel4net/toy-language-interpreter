@@ -10,5 +10,6 @@ public interface IController {
     void executeProgram();
 
     void setDisplayFlag(boolean status);
+    void setProgramLogFile(String logFileName);
     void displayProgramState(ProgramState state);
 }

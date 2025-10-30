@@ -75,7 +75,7 @@ public class ADTList<T> implements IADTList<T> {
 
     @Override
     public List<T> getAll() {
-        return this.list;
+        return List.copyOf(this.list);
     }
 
     @Override

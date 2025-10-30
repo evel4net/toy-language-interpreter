@@ -1,6 +1,7 @@
 package repository;
 
 import model.adt.list.InvalidIndexException;
+import model.exceptions.FileNotFoundException;
 import model.program_state.ProgramState;
 
 import java.util.List;
@@ -11,4 +12,7 @@ public interface IRepository {
 
     void addProgramState(ProgramState state);
     List<ProgramState> getProgramStates();
+
+    void setLogFile(String logFileName);
+    void logProgramState() throws FileNotFoundException;
 }

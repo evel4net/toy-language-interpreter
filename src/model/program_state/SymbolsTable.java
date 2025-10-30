@@ -3,8 +3,11 @@ package model.program_state;
 import model.adt.dictionary.ADTDictionary;
 import model.adt.dictionary.IADTDictionary;
 import model.adt.dictionary.KeyNotDefinedException;
+import model.statements.Statement;
 import model.types.Type;
 import model.values.Value;
+
+import java.util.Map;
 
 public class SymbolsTable {
     private final IADTDictionary<String, Value> table = new ADTDictionary<>();
@@ -32,5 +35,17 @@ public class SymbolsTable {
     @Override
     public String toString() {
         return this.table.toString();
+    }
+
+    public String toLogFileString() {
+        String logFileEntry = "";
+        Map<String, Value> mapCopy = this.table.getMap();
+
+        for (Map.Entry<String, Value> variable : mapCopy.entrySet()) {
+            logFileEntry += variable.toString();
+            logFileEntry += "\n";
+        }
+
+        return logFileEntry;
     }
 }

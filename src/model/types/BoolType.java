@@ -5,13 +5,13 @@ import model.values.Value;
 
 public class BoolType implements Type {
     @Override
-    public boolean equals(Object another) {
-        return (another instanceof BoolType);
+    public Value getDefaultValue() {
+        return new BoolValue(false);
     }
 
     @Override
-    public Value getDefaultValue() {
-        return new BoolValue(false);
+    public boolean equals(Object another) {
+        return (another instanceof BoolType);
     }
 
     @Override

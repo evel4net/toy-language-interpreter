@@ -40,6 +40,11 @@ public class ADTStack<T> implements IADTStack<T> {
     }
 
     @Override
+    public List<T> getAll() {
+        return List.copyOf(this.stack);
+    }
+
+    @Override
     public String toString() {
         return this.stack.toString();
     }

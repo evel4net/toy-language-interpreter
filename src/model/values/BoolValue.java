@@ -20,6 +20,11 @@ public class BoolValue implements Value {
     }
 
     @Override
+    public boolean equals(Object another) {
+        return (another instanceof BoolValue);
+    }
+
+    @Override
     public String toString() {
         return Boolean.toString(this.value);
     }

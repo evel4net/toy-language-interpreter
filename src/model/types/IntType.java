@@ -5,13 +5,13 @@ import model.values.Value;
 
 public class IntType implements Type {
     @Override
-    public boolean equals(Object another) {
-        return (another instanceof IntType);
+    public Value getDefaultValue() {
+        return new IntValue(0);
     }
 
     @Override
-    public Value getDefaultValue() {
-        return new IntValue(0);
+    public boolean equals(Object another) {
+        return (another instanceof IntType);
     }
 
     @Override

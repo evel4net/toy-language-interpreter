@@ -42,7 +42,7 @@ public class ADTDictionary<K, V> implements IADTDictionary<K, V> {
 
     @Override
     public Map<K, V> getMap() {
-        return this.dictionary;
+        return Map.copyOf(this.dictionary);
     }
 
     @Override
