@@ -1,6 +1,6 @@
 package model.statements;
 
-import model.exceptions.ProgramException;
+import exceptions.ProgramException;
 import model.program_state.ProgramState;
 
 public interface Statement {

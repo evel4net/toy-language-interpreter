@@ -1,8 +1,8 @@
 package model.statements;
 
 import model.expressions.Expression;
-import model.exceptions.ProgramException;
-import model.exceptions.InvalidTypeException;
+import exceptions.ProgramException;
+import exceptions.InvalidTypeException;
 import model.program_state.ProgramState;
 import model.values.BoolValue;
 import model.values.Value;
@@ -36,7 +36,7 @@ public class IfStatement implements Statement {
 
     @Override
     public String toString() {
-        return "(If (" + this.expression.toString() + ") then (" + this.thenStatement.toString() +
-                ") else (" + this.elseStatement.toString() + "))";
+        return "If (" + this.expression.toString() + ") then (" + this.thenStatement.toString() +
+                ") else (" + this.elseStatement.toString() + ")";
     }
 }

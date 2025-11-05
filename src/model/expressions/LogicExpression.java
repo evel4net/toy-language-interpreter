@@ -1,8 +1,8 @@
 package model.expressions;
 
-import model.exceptions.ProgramException;
-import model.exceptions.InvalidTypeException;
-import model.exceptions.IncorrectOperatorException;
+import exceptions.ProgramException;
+import exceptions.InvalidTypeException;
+import exceptions.IncorrectOperatorException;
 import model.program_state.SymbolsTable;
 import model.types.BoolType;
 import model.values.BoolValue;

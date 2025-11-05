@@ -1,9 +1,9 @@
 package model.expressions;
 
-import model.exceptions.DivisionByZeroException;
-import model.exceptions.ProgramException;
-import model.exceptions.InvalidTypeException;
-import model.exceptions.IncorrectOperatorException;
+import exceptions.DivisionByZeroException;
+import exceptions.ProgramException;
+import exceptions.InvalidTypeException;
+import exceptions.IncorrectOperatorException;
 import model.program_state.SymbolsTable;
 import model.types.IntType;
 import model.values.IntValue;
@@ -31,7 +31,6 @@ public class ArithmeticExpression implements Expression {
 
         int numberLeft = ((IntValue) valueLeft).getValue();
         int numberRight = ((IntValue) valueRight).getValue();
-
 
         int result = switch (this.operator) {
             case '+' -> (numberLeft + numberRight);

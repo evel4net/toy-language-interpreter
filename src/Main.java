@@ -1,9 +1,6 @@
 import controller.Controller;
 import controller.IController;
-import model.expressions.ArithmeticExpression;
-import model.expressions.Expression;
-import model.expressions.ValueExpression;
-import model.expressions.VariableExpression;
+import model.expressions.*;
 import model.program_state.*;
 import model.statements.*;
 import model.types.BoolType;
@@ -23,12 +20,18 @@ public class Main {
 
 
     public static void main(String[] args) {
-        // Example 1 : int v; v = 2; Print(v)
+        // Example 1 : int v; v = 2; Print(v); Print(v <= 1)
         Statement example1 = new CompoundStatement(
                 new VariableDeclarationStatement(new IntType(), "v"),
                 new CompoundStatement(
                         new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
-                        new PrintStatement(new VariableExpression("v"))
+                        new CompoundStatement(
+                            new PrintStatement(new VariableExpression("v")),
+                                new PrintStatement(new RelationalExpression(
+                                        new VariableExpression("v"),
+                                        new ValueExpression(new IntValue(1)),
+                                        "<="))
+                                )
                 )
         );
         ProgramState state1 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example1);
@@ -111,18 +114,18 @@ public class Main {
                 new CompoundStatement(
                         new AssignmentStatement("varf", new ValueExpression(new StringValue("test.in"))),
                         new CompoundStatement(
-                                new OpenReadFile(new VariableExpression("varf")),
+                                new OpenReadFileStatement(new VariableExpression("varf")),
                                 new CompoundStatement(
                                         new VariableDeclarationStatement(new IntType(), "varc"),
                                         new CompoundStatement(
-                                                new ReadFile(new VariableExpression("varf"), "varc"),
+                                                new ReadFileStatement(new VariableExpression("varf"), "varc"),
                                                 new CompoundStatement(
                                                         new PrintStatement(new VariableExpression("varc")),
                                                         new CompoundStatement(
-                                                                new ReadFile(new VariableExpression("varf"), "varc"),
+                                                                new ReadFileStatement(new VariableExpression("varf"), "varc"),
                                                                 new CompoundStatement(
                                                                         new PrintStatement(new VariableExpression("varc")),
-                                                                        new CloseReadFile(new VariableExpression("varf"))
+                                                                        new CloseReadFileStatement(new VariableExpression("varf"))
                                                                 )
                                                         )
                                                 )
@@ -222,18 +225,18 @@ public class Main {
                 new CompoundStatement(
                         new AssignmentStatement("varf", new ValueExpression(new StringValue("test.in"))),
                         new CompoundStatement(
-                                new OpenReadFile(new VariableExpression("varf")),
+                                new OpenReadFileStatement(new VariableExpression("varf")),
                                 new CompoundStatement(
                                         new VariableDeclarationStatement(new IntType(), "varc"),
                                         new CompoundStatement(
-                                                new ReadFile(new VariableExpression("varf"), "varc"),
+                                                new ReadFileStatement(new VariableExpression("varf"), "varc"),
                                                 new CompoundStatement(
                                                         new PrintStatement(new VariableExpression("varc")),
                                                         new CompoundStatement(
-                                                                new ReadFile(new VariableExpression("varf"), "varc"),
+                                                                new ReadFileStatement(new VariableExpression("varf"), "varc"),
                                                                 new CompoundStatement(
                                                                         new PrintStatement(new VariableExpression("varc")),
-                                                                        new CloseReadFile(new VariableExpression("varf"))
+                                                                        new CloseReadFileStatement(new VariableExpression("varf"))
                                                                 )
                                                         )
                                                 )

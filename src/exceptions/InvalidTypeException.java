@@ -1,4 +1,4 @@
-package model.exceptions;
+package exceptions;
 
 public class InvalidTypeException extends ProgramException {
     public InvalidTypeException(String message) {

@@ -1,7 +1,7 @@
 package model.expressions;
 
-import model.exceptions.ProgramException;
-import model.exceptions.VariableNotDefinedException;
+import exceptions.ProgramException;
+import exceptions.VariableNotDefinedException;
 import model.program_state.SymbolsTable;
 import model.values.Value;
 

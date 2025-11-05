@@ -1,4 +1,4 @@
-package model.exceptions;
+package exceptions;
 
 public class VariableAlreadyDefinedException extends ProgramException {
     public VariableAlreadyDefinedException(String variableName) {

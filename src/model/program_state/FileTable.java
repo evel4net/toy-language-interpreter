@@ -1,10 +1,11 @@
 package model.program_state;
 
+import exceptions.FileAlreadyExistsException;
 import model.adt.dictionary.ADTDictionary;
 import model.adt.dictionary.IADTDictionary;
 import model.adt.dictionary.KeyNotDefinedException;
 import model.values.StringValue;
-import model.exceptions.FileNotFoundException;
+import exceptions.FileNotFoundException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,9 +18,11 @@ public class FileTable {
         return this.table.exists(fileName);
     }
 
-    public void addFile(StringValue fileName) throws FileNotFoundException {
+    public void openFile(StringValue fileName) throws FileNotFoundException, FileAlreadyExistsException {
+        if (this.existsFile(fileName)) throw new FileAlreadyExistsException(fileName.getValue());
+
         try {
-            BufferedReader fileReader = new BufferedReader(new FileReader("./" + fileName.getValue()));
+            BufferedReader fileReader = new BufferedReader(new FileReader(fileName.getValue()));
 
             this.table.insert(fileName, fileReader);
         } catch (IOException e) {
@@ -27,7 +30,7 @@ public class FileTable {
         }
     }
 
-    public void closeAndRemoveFile(StringValue fileName) throws FileNotFoundException{
+    public void closeFile(StringValue fileName) throws FileNotFoundException{
         try {
             BufferedReader fileReader = this.getReader(fileName);
             fileReader.close();
@@ -43,7 +46,7 @@ public class FileTable {
 
     @Override
     public String toString() {
-        return this.table.toString();
+        return this.table.getKeys().toString();
     }
 
     public String tologFileString() {

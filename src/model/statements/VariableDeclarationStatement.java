@@ -1,7 +1,7 @@
 package model.statements;
 
-import model.exceptions.ProgramException;
-import model.exceptions.VariableAlreadyDefinedException;
+import exceptions.ProgramException;
+import exceptions.VariableAlreadyDefinedException;
 import model.program_state.ProgramState;
 import model.program_state.SymbolsTable;
 import model.types.Type;

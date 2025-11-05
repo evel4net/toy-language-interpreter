@@ -1,4 +1,4 @@
-package model.exceptions;
+package exceptions;
 
 public class VariableNotDefinedException extends ProgramException {
     public VariableNotDefinedException(String variableName) {

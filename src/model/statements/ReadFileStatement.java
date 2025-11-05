@@ -1,10 +1,10 @@
 package model.statements;
 
 import model.adt.dictionary.KeyNotDefinedException;
-import model.exceptions.FileNotFoundException;
-import model.exceptions.InvalidTypeException;
-import model.exceptions.ProgramException;
-import model.exceptions.VariableNotDefinedException;
+import exceptions.FileNotFoundException;
+import exceptions.InvalidTypeException;
+import exceptions.ProgramException;
+import exceptions.VariableNotDefinedException;
 import model.expressions.Expression;
 import model.program_state.ProgramState;
 import model.program_state.SymbolsTable;
@@ -17,11 +17,11 @@ import model.values.Value;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class ReadFile implements Statement {
+public class ReadFileStatement implements Statement {
     private final Expression file;
     private final String variableName;
 
-    public ReadFile(Expression file, String variableName) {
+    public ReadFileStatement(Expression file, String variableName) {
         this.file = file;
         this.variableName = variableName;
     }
@@ -48,6 +48,8 @@ public class ReadFile implements Statement {
             symbolsTable.updateVariableValue(this.variableName, lineValue);
         } catch (KeyNotDefinedException | IOException e) {
             throw new FileNotFoundException(((StringValue) fileName).getValue());
+        } catch (NumberFormatException e) {
+            throw new InvalidTypeException("File line is not an integer value.");
         }
 
         return state;
@@ -55,7 +57,7 @@ public class ReadFile implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new ReadFile(this.file, this.variableName);
+        return new ReadFileStatement(this.file, this.variableName);
     }
 
     @Override

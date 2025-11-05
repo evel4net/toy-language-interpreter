@@ -1,17 +1,17 @@
 package model.statements;
 
-import model.exceptions.InvalidTypeException;
-import model.exceptions.ProgramException;
+import exceptions.InvalidTypeException;
+import exceptions.ProgramException;
 import model.expressions.Expression;
 import model.program_state.ProgramState;
 import model.types.StringType;
 import model.values.StringValue;
 import model.values.Value;
 
-public class CloseReadFile implements Statement {
+public class CloseReadFileStatement implements Statement {
     private final Expression file;
 
-    public CloseReadFile(Expression file) {
+    public CloseReadFileStatement(Expression file) {
         this.file = file;
     }
 
@@ -21,14 +21,14 @@ public class CloseReadFile implements Statement {
 
         if (!(fileName.getType() instanceof StringType)) throw new InvalidTypeException("File name is not a string");
 
-        state.getFileTable().closeAndRemoveFile((StringValue) fileName);
+        state.getFileTable().closeFile((StringValue) fileName);
 
         return state;
     }
 
     @Override
     public Statement deepCopy() {
-        return new CloseReadFile(this.file);
+        return new CloseReadFileStatement(this.file);
     }
 
     @Override

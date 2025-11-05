@@ -1,7 +1,7 @@
 package repository;
 
 import model.adt.list.InvalidIndexException;
-import model.exceptions.FileNotFoundException;
+import exceptions.FileNotFoundException;
 import model.program_state.ProgramState;
 
 import java.io.BufferedWriter;

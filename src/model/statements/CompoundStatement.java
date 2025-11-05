@@ -1,6 +1,5 @@
 package model.statements;
 
-import model.exceptions.ProgramException;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
 

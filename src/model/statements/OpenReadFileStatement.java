@@ -1,8 +1,8 @@
 package model.statements;
 
-import model.exceptions.FileAlreadyExistsException;
-import model.exceptions.InvalidTypeException;
-import model.exceptions.ProgramException;
+import exceptions.FileAlreadyExistsException;
+import exceptions.InvalidTypeException;
+import exceptions.ProgramException;
 import model.expressions.Expression;
 import model.program_state.FileTable;
 import model.program_state.ProgramState;
@@ -10,10 +10,10 @@ import model.types.StringType;
 import model.values.StringValue;
 import model.values.Value;
 
-public class OpenReadFile implements Statement {
+public class OpenReadFileStatement implements Statement {
     private final Expression file;
 
-    public OpenReadFile(Expression fileName) {
+    public OpenReadFileStatement(Expression fileName) {
         this.file = fileName;
     }
 
@@ -26,14 +26,14 @@ public class OpenReadFile implements Statement {
         FileTable filesTable = state.getFileTable();
         if (filesTable.existsFile((StringValue) fileName)) throw new FileAlreadyExistsException(((StringValue) fileName).getValue());
 
-        filesTable.addFile((StringValue) fileName);
+        filesTable.openFile((StringValue) fileName);
 
         return state;
     }
 
     @Override
     public Statement deepCopy() {
-        return new OpenReadFile(this.file);
+        return new OpenReadFileStatement(this.file);
     }
 
     @Override

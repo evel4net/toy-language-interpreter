@@ -1,9 +1,9 @@
 package model.statements;
 
 import model.expressions.Expression;
-import model.exceptions.ProgramException;
-import model.exceptions.InvalidTypeException;
-import model.exceptions.VariableNotDefinedException;
+import exceptions.ProgramException;
+import exceptions.InvalidTypeException;
+import exceptions.VariableNotDefinedException;
 import model.program_state.ProgramState;
 import model.program_state.SymbolsTable;
 import model.types.Type;
@@ -41,6 +41,6 @@ public class AssignmentStatement implements Statement {
 
     @Override
     public String toString() {
-        return this.variableName + " = " + this.expression.toString();
+        return this.variableName + "=" + this.expression.toString();
     }
 }

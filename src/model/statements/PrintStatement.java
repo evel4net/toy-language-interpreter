@@ -1,7 +1,7 @@
 package model.statements;
 
 import model.expressions.Expression;
-import model.exceptions.ProgramException;
+import exceptions.ProgramException;
 import model.program_state.ProgramState;
 
 public class PrintStatement implements Statement {
@@ -25,6 +25,6 @@ public class PrintStatement implements Statement {
 
     @Override
     public String toString() {
-        return "print(" + this.expression.toString() + ")";
+        return "Print(" + this.expression.toString() + ")";
     }
 }

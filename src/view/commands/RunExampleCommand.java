@@ -1,7 +1,7 @@
 package view.commands;
 
 import controller.IController;
-import model.exceptions.ProgramException;
+import exceptions.ProgramException;
 
 public class RunExampleCommand extends Command {
     private final IController controller;

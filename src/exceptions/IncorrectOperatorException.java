@@ -1,4 +1,4 @@
-package model.exceptions;
+package exceptions;
 
 public class IncorrectOperatorException extends ProgramException {
     public IncorrectOperatorException(String operator) {

@@ -1,6 +1,6 @@
 package model.expressions;
 
-import model.exceptions.ProgramException;
+import exceptions.ProgramException;
 import model.program_state.SymbolsTable;
 import model.values.Value;
 
