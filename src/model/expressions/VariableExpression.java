@@ -20,6 +20,11 @@ public class VariableExpression implements Expression {
     }
 
     @Override
+    public Expression deepCopy() {
+        return new VariableExpression(this.variableName);
+    }
+
+    @Override
     public String toString() {
         return this.variableName;
     }

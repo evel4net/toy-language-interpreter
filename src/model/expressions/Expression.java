@@ -6,5 +6,6 @@ import model.values.Value;
 
 public interface Expression {
     Value evaluate(SymbolsTable symbolsTable) throws ProgramException;
+    Expression deepCopy();
     String toString();
 }

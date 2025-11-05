@@ -50,6 +50,11 @@ public class ArithmeticExpression implements Expression {
     }
 
     @Override
+    public Expression deepCopy() {
+        return new ArithmeticExpression(this.expressionLeft, this.expressionRight, this.operator);
+    }
+
+    @Override
     public String toString() {
         return this.expressionLeft + " " + this.operator + " " + this.expressionRight;
     }

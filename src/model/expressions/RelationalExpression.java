@@ -10,21 +10,21 @@ import model.values.IntValue;
 import model.values.Value;
 
 public class RelationalExpression implements Expression {
-    private final Expression leftExpression, rightExpression;
+    private final Expression expressionLeft, expressionRight;
     private final String operator;
 
-    public RelationalExpression(Expression leftExpression, Expression rightExpression, String operator) {
-        this.leftExpression = leftExpression;
-        this.rightExpression = rightExpression;
+    public RelationalExpression(Expression expressionLeft, Expression expressionRight, String operator) {
+        this.expressionLeft = expressionLeft;
+        this.expressionRight = expressionRight;
         this.operator = operator;
     }
 
     @Override
     public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
-        Value leftValue = this.leftExpression.evaluate(symbolsTable);
+        Value leftValue = this.expressionLeft.evaluate(symbolsTable);
         if (!(leftValue.getType() instanceof IntType)) throw new InvalidTypeException("Left relational expression is not of integer type.");
 
-        Value rightValue = this.rightExpression.evaluate(symbolsTable);
+        Value rightValue = this.expressionRight.evaluate(symbolsTable);
         if (!(rightValue.getType() instanceof IntType)) throw new InvalidTypeException("Right relational expression is not of integer type.");
 
         int leftNumber = ((IntValue) leftValue).getValue();
@@ -44,7 +44,12 @@ public class RelationalExpression implements Expression {
     }
 
     @Override
+    public Expression deepCopy() {
+        return new RelationalExpression(this.expressionLeft, this.expressionRight, this.operator);
+    }
+
+    @Override
     public String toString() {
-        return this.leftExpression.toString() + this.operator + this.rightExpression.toString();
+        return this.expressionLeft.toString() + this.operator + this.expressionRight.toString();
     }
 }

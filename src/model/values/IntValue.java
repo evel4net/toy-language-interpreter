@@ -25,6 +25,11 @@ public class IntValue implements Value {
     }
 
     @Override
+    public Value deepCopy() {
+        return new IntValue(this.value);
+    }
+
+    @Override
     public String toString() {
         return Integer.toString(this.value);
     }
