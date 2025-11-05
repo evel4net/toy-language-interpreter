@@ -46,6 +46,8 @@ public class Controller implements IController {
             this.repository.logProgramState();
             this.displayProgramState(currentProgramState);
         }
+
+        currentProgramState.resetToOriginalProgram();
     }
 
     @Override

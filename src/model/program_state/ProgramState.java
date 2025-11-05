@@ -61,6 +61,17 @@ public class ProgramState {
         return this.originalProgram;
     }
 
+    public void resetToOriginalProgram() {
+        this.executionStack = new ExecutionStack();
+        this.output = new Output();
+        this.symbolsTable = new SymbolsTable();
+        this.fileTable = new FileTable();
+
+        Statement program = this.originalProgram.deepCopy();
+
+        this.executionStack.push(program);
+    }
+
     @Override
     public String toString() {
         return "ProgramState{" +
