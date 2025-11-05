@@ -44,7 +44,7 @@ public class LogicExpression implements Expression {
 
     @Override
     public Expression deepCopy() {
-        return new LogicExpression(this.expressionLeft, this.expressionRight, this.operator);
+        return new LogicExpression(this.expressionLeft.deepCopy(), this.expressionRight.deepCopy(), this.operator);
     }
 
     @Override

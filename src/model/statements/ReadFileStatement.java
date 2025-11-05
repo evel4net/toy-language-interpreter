@@ -57,7 +57,7 @@ public class ReadFileStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new ReadFileStatement(this.file, this.variableName);
+        return new ReadFileStatement(this.file.deepCopy(), this.variableName);
     }
 
     @Override

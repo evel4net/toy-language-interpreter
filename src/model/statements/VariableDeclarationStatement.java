@@ -28,7 +28,7 @@ public class VariableDeclarationStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new VariableDeclarationStatement(this.type, this.variableName);
+        return new VariableDeclarationStatement(this.type.deepCopy(), this.variableName);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class AssignmentStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new AssignmentStatement(this.variableName, this.expression);
+        return new AssignmentStatement(this.variableName, this.expression.deepCopy());
     }
 
     @Override

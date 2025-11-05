@@ -18,7 +18,7 @@ public class ValueExpression implements Expression {
 
     @Override
     public Expression deepCopy() {
-        return new ValueExpression(this.value);
+        return new ValueExpression(this.value.deepCopy());
     }
 
     @Override

@@ -23,7 +23,7 @@ public class CompoundStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new CompoundStatement(this.firstStatement, this.secondStatement);
+        return new CompoundStatement(this.firstStatement.deepCopy(), this.secondStatement.deepCopy());
     }
 
     @Override

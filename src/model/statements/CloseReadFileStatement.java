@@ -28,7 +28,7 @@ public class CloseReadFileStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new CloseReadFileStatement(this.file);
+        return new CloseReadFileStatement(this.file.deepCopy());
     }
 
     @Override

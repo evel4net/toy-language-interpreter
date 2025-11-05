@@ -31,7 +31,7 @@ public class IfStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new IfStatement(this.expression, this.thenStatement, this.elseStatement);
+        return new IfStatement(this.expression.deepCopy(), this.thenStatement.deepCopy(), this.elseStatement.deepCopy());
     }
 
     @Override

@@ -33,7 +33,7 @@ public class OpenReadFileStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new OpenReadFileStatement(this.file);
+        return new OpenReadFileStatement(this.file.deepCopy());
     }
 
     @Override

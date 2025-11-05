@@ -20,7 +20,7 @@ public class PrintStatement implements Statement {
 
     @Override
     public Statement deepCopy() {
-        return new PrintStatement(this.expression);
+        return new PrintStatement(this.expression.deepCopy());
     }
 
     @Override
