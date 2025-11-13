@@ -7,18 +7,21 @@ public class ProgramState {
     private SymbolsTable symbolsTable;
     private Output output;
     private FileTable fileTable;
+    private HeapTable heapTable;
     private final Statement originalProgram;
 
     public ProgramState(ExecutionStack executionStack,
                         SymbolsTable symbolsTable,
                         Output output,
                         FileTable fileTable,
+                        HeapTable heapTable,
                         Statement program) {
 
         this.executionStack = executionStack;
         this.symbolsTable = symbolsTable;
         this.output = output;
         this.fileTable = fileTable;
+        this.heapTable = heapTable;
 
         this.originalProgram = program.deepCopy();
 
@@ -57,6 +60,14 @@ public class ProgramState {
         this.fileTable = fileTable;
     }
 
+    public HeapTable getHeapTable() {
+        return heapTable;
+    }
+
+    public void setHeapTable(HeapTable heapTable) {
+        this.heapTable = heapTable;
+    }
+
     public Statement getOriginalProgram() {
         return this.originalProgram;
     }
@@ -66,6 +77,7 @@ public class ProgramState {
         this.output = new Output();
         this.symbolsTable = new SymbolsTable();
         this.fileTable = new FileTable();
+        this.heapTable = new HeapTable();
 
         Statement program = this.originalProgram.deepCopy();
 
@@ -78,6 +90,7 @@ public class ProgramState {
                 "executionStack=" + this.executionStack.toString() +
                 ", symbolsTable=" + this.symbolsTable.toString() +
                 ", fileTable=" + this.fileTable.toString() +
+                ", heapTable=" + this.heapTable.toString() +
                 ", output=" + this.output.toString() +
                 '}';
     }
