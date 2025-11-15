@@ -26,8 +26,8 @@ public class WhileStatement implements Statement {
         if (((BoolValue) expressionValue).getValue()) {
             ExecutionStack executionStack = state.getExecutionStack();
 
-            executionStack.push(this.statement.deepCopy());
             executionStack.push(this);
+            executionStack.push(this.statement.deepCopy());
         }
 
         return state;

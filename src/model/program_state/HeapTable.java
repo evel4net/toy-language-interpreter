@@ -21,7 +21,7 @@ public class HeapTable {
         return entryAddress;
     }
 
-    public void updateEntry(int address, Value value) {
+    public void updateEntry(int address, Value value) throws KeyNotDefinedException {
         if (!this.existsAddress(address)) throw new KeyNotDefinedException(Integer.toString(address));
 
         this.heap.put(address, value);

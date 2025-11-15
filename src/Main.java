@@ -109,12 +109,12 @@ public class Main {
 
         // Example 4:
         // string varf;
-        //varf="test.in";
-        //openRFile(varf);
-        //int varc;
-        //readFile(varf,varc);print(varc);
-        //readFile(varf,varc);print(varc)
-        //closeRFile(varf)
+        //  varf="test.in";
+        //  OpenRFile(varf);
+        //  int varc;
+        //  ReadFile(varf,varc); Print(varc);
+        //  ReadFile(varf,varc); Print(varc)
+        //  CloseRFile(varf)
 
         Statement example4 = new CompoundStatement(
                 new VariableDeclarationStatement(new StringType(), "varf"),
@@ -148,7 +148,7 @@ public class Main {
         controller4.addProgramState(state4);
         controller4.setProgramLogFile("logFile4.txt");
 
-        // Example 5: Ref int v; new(v, 20); print(ReadHeap(v)); WriteHeap(v, 30); print(ReadHeap(v) + 5);
+        // Example 5: Ref int v; new(v, 20); print(ReadHeap(v)); WriteHeap(v, 30); Print(ReadHeap(v) + 5);
 
         Statement example5 = new CompoundStatement(
                 new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
@@ -174,6 +174,31 @@ public class Main {
         controller5.addProgramState(state5);
         controller5.setProgramLogFile("logFile5.txt");
 
+        // Example 6: int v; v = 4; (While (v > 0) (Print(v); v = v - 1); Print(v)
+
+        Statement example6 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v"),
+                new CompoundStatement(
+                        new AssignmentStatement("v", new ValueExpression(new IntValue(4))),
+                        new CompoundStatement(
+                                new WhileStatement(
+                                        new RelationalExpression(new VariableExpression("v"), new ValueExpression(new IntValue(0)), ">"),
+                                        new CompoundStatement(
+                                                new PrintStatement(new VariableExpression("v")),
+                                                new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), '-'))
+                                        )
+                                ),
+                                new PrintStatement(new VariableExpression("v"))
+                        )
+                )
+        );
+
+        ProgramState state6 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example6);
+        IRepository repository6 = new Repository();
+        IController controller6 = new Controller(repository6, true);
+        controller6.addProgramState(state6);
+        controller6.setProgramLogFile("logFile6.txt");
+
         // ---
 
         TextMenu menu = new TextMenu();
@@ -183,6 +208,7 @@ public class Main {
         menu.addCommand(new RunExampleCommand("3", example3.toString(), controller3));
         menu.addCommand(new RunExampleCommand("4", example4.toString(), controller4));
         menu.addCommand(new RunExampleCommand("5", example5.toString(), controller5));
+        menu.addCommand(new RunExampleCommand("6", example6.toString(), controller6));
 
         menu.show();
     }

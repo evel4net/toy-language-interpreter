@@ -17,14 +17,9 @@ public class ReferenceValue implements Value {
     }
 
     @Override
-//    public Type getType() {
-//        return this.locationType;
-//    }
-
     public Type getType() {
         return new ReferenceType(this.locationType);
     }
-//    TODO return locationType or ReferenceType(locationType) ?
 
     @Override
     public boolean equals(Object another) {
