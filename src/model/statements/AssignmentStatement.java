@@ -24,7 +24,7 @@ public class AssignmentStatement implements Statement {
 
         if (!symbolsTable.isVariableDefined(this.variableName)) throw new VariableNotDefinedException(this.variableName);
 
-        Value expressionValue = this.expression.evaluate(symbolsTable);
+        Value expressionValue = this.expression.evaluate(symbolsTable, );
 
         Type variableType = symbolsTable.getVariableType(this.variableName);
         if (!(expressionValue.getType().equals(variableType))) throw new InvalidTypeException("Assignment type mismatch with variable type.");

@@ -3,6 +3,7 @@ package model.expressions;
 import exceptions.IncorrectOperatorException;
 import exceptions.InvalidTypeException;
 import exceptions.ProgramException;
+import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
 import model.types.IntType;
 import model.values.BoolValue;
@@ -20,11 +21,11 @@ public class RelationalExpression implements Expression {
     }
 
     @Override
-    public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
-        Value leftValue = this.expressionLeft.evaluate(symbolsTable);
+    public Value evaluate(SymbolsTable symbolsTable, HeapTable heapTable) throws ProgramException {
+        Value leftValue = this.expressionLeft.evaluate(symbolsTable, heapTable);
         if (!(leftValue.getType() instanceof IntType)) throw new InvalidTypeException("Left relational expression is not of integer type.");
 
-        Value rightValue = this.expressionRight.evaluate(symbolsTable);
+        Value rightValue = this.expressionRight.evaluate(symbolsTable, heapTable);
         if (!(rightValue.getType() instanceof IntType)) throw new InvalidTypeException("Right relational expression is not of integer type.");
 
         int leftNumber = ((IntValue) leftValue).getValue();

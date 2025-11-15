@@ -4,6 +4,7 @@ import exceptions.DivisionByZeroException;
 import exceptions.ProgramException;
 import exceptions.InvalidTypeException;
 import exceptions.IncorrectOperatorException;
+import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
 import model.types.IntType;
 import model.values.IntValue;
@@ -20,13 +21,13 @@ public class ArithmeticExpression implements Expression {
     }
 
     @Override
-    public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
+    public Value evaluate(SymbolsTable symbolsTable, HeapTable heapTable) throws ProgramException {
         Value valueLeft, valueRight;
 
-        valueLeft = this.expressionLeft.evaluate(symbolsTable);
+        valueLeft = this.expressionLeft.evaluate(symbolsTable, heapTable);
         if (!(valueLeft.getType() instanceof IntType)) throw new InvalidTypeException("First operand is not an integer.");
 
-        valueRight = this.expressionRight.evaluate(symbolsTable);
+        valueRight = this.expressionRight.evaluate(symbolsTable, heapTable);
         if (!(valueRight.getType() instanceof IntType)) throw new InvalidTypeException("Second operand is not an integer.");
 
         int numberLeft = ((IntValue) valueLeft).getValue();

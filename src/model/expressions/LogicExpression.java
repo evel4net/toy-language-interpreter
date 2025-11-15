@@ -3,6 +3,7 @@ package model.expressions;
 import exceptions.ProgramException;
 import exceptions.InvalidTypeException;
 import exceptions.IncorrectOperatorException;
+import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
 import model.types.BoolType;
 import model.values.BoolValue;
@@ -21,13 +22,13 @@ public class LogicExpression implements Expression {
     }
 
     @Override
-    public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
+    public Value evaluate(SymbolsTable symbolsTable, HeapTable heapTable) throws ProgramException {
         Value valueLeft, valueRight;
 
-        valueLeft = this.expressionLeft.evaluate(symbolsTable);
+        valueLeft = this.expressionLeft.evaluate(symbolsTable, heapTable);
         if (!(valueLeft.getType() instanceof BoolType)) throw new InvalidTypeException("First operand is not a boolean.");
 
-        valueRight = this.expressionRight.evaluate(symbolsTable);
+        valueRight = this.expressionRight.evaluate(symbolsTable, heapTable);
         if (!(valueRight.getType() instanceof BoolType)) throw new InvalidTypeException("Second operand is not a boolean.");
 
         boolean boolLeft = ((BoolValue)valueLeft).getValue();

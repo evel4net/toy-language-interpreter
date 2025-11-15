@@ -1,5 +1,6 @@
 package model.program_state;
 
+import model.adt.dictionary.KeyNotDefinedException;
 import model.values.StringValue;
 import model.values.Value;
 
@@ -13,12 +14,28 @@ public class HeapTable {
 
     public int addNewEntry(Value value) throws KeyAlreadyExistsException {
         int entryAddress = this.newFreeAddress;
-        if (this.heap.containsKey(entryAddress)) throw new KeyAlreadyExistsException("Heap address " + entryAddress + " is already associated to a value.");
+        if (this.existsAddress(entryAddress)) throw new KeyAlreadyExistsException("Heap address " + entryAddress + " is already associated to a value.");
 
         this.heap.put(entryAddress, value);
         this.newFreeAddress += 1;
 
         return entryAddress;
+    }
+
+    public void updateEntry(int address, Value value) {
+        if (!this.existsAddress(address)) throw new KeyNotDefinedException(Integer.toString(address));
+
+        this.heap.put(address, value);
+    }
+
+    public Value getValue(int address) throws KeyNotDefinedException {
+        if (!this.existsAddress(address)) throw new KeyNotDefinedException(Integer.toString(address));
+
+        return this.heap.get(address);
+    }
+
+    public boolean existsAddress(int address) {
+        return this.heap.containsKey(address);
     }
 
     @Override
@@ -36,4 +53,7 @@ public class HeapTable {
 
         return logFileEntry;
     }
+
+
+
 }

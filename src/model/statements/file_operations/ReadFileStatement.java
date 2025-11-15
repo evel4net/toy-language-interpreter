@@ -1,4 +1,4 @@
-package model.statements;
+package model.statements.file_operations;
 
 import model.adt.dictionary.KeyNotDefinedException;
 import exceptions.FileNotFoundException;
@@ -8,6 +8,7 @@ import exceptions.VariableNotDefinedException;
 import model.expressions.Expression;
 import model.program_state.ProgramState;
 import model.program_state.SymbolsTable;
+import model.statements.Statement;
 import model.types.IntType;
 import model.types.Type;
 import model.values.IntValue;
@@ -34,7 +35,7 @@ public class ReadFileStatement implements Statement {
         Type variableType = symbolsTable.getVariableType(this.variableName);
         if (!(variableType instanceof IntType)) throw new InvalidTypeException("Variable in not of integer type.");
 
-        Value fileName = this.file.evaluate(symbolsTable);
+        Value fileName = this.file.evaluate(symbolsTable, );
         if (!(fileName instanceof StringValue)) throw new InvalidTypeException("File name is not of string type.");
 
         try {

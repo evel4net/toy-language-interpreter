@@ -2,6 +2,7 @@ package model.expressions;
 
 import exceptions.ProgramException;
 import exceptions.VariableNotDefinedException;
+import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
 import model.values.Value;
 
@@ -13,7 +14,7 @@ public class VariableExpression implements Expression {
     }
 
     @Override
-    public Value evaluate(SymbolsTable symbolsTable) throws ProgramException {
+    public Value evaluate(SymbolsTable symbolsTable, HeapTable heapTable) throws ProgramException {
         if (!symbolsTable.isVariableDefined(this.variableName)) throw new VariableNotDefinedException(this.variableName);
 
         return symbolsTable.getVariableValue(this.variableName);

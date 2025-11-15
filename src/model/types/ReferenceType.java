@@ -1,5 +1,6 @@
 package model.types;
 
+import model.values.ReferenceValue;
 import model.values.Value;
 
 public class ReferenceType implements Type {
@@ -15,7 +16,7 @@ public class ReferenceType implements Type {
 
     @Override
     public Value getDefaultValue() {
-        return null;
+        return new ReferenceValue(0, this.innerType);
     }
 
     @Override

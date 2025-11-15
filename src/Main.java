@@ -3,8 +3,15 @@ import controller.IController;
 import model.expressions.*;
 import model.program_state.*;
 import model.statements.*;
+import model.statements.file_operations.CloseReadFileStatement;
+import model.statements.file_operations.OpenReadFileStatement;
+import model.statements.file_operations.ReadFileStatement;
+import model.statements.heap_operations.AllocateHeapStatement;
+import model.expressions.ReadHeapExpression;
+import model.statements.heap_operations.WriteHeapStatement;
 import model.types.BoolType;
 import model.types.IntType;
+import model.types.ReferenceType;
 import model.types.StringType;
 import model.values.BoolValue;
 import model.values.IntValue;
@@ -34,7 +41,7 @@ public class Main {
                                 )
                 )
         );
-        ProgramState state1 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example1);
+        ProgramState state1 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example1);
         IRepository repository1 = new Repository();
         IController controller1 = new Controller(repository1, true);
         controller1.addProgramState(state1);
@@ -69,7 +76,7 @@ public class Main {
                 )
         );
 
-        ProgramState state2 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example2);
+        ProgramState state2 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example2);
         IRepository repository2 = new Repository();
         IController controller2 = new Controller(repository2, true);
         controller2.addProgramState(state2);
@@ -94,7 +101,7 @@ public class Main {
                 )
         );
 
-        ProgramState state3 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example3);
+        ProgramState state3 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example3);
         IRepository repository3 = new Repository();
         IController controller3 = new Controller(repository3, true);
         controller3.addProgramState(state3);
@@ -135,11 +142,33 @@ public class Main {
                 )
         );
 
-        ProgramState state4 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example4);
+        ProgramState state4 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example4);
         IRepository repository4 = new Repository();
         IController controller4 = new Controller(repository4, true);
         controller4.addProgramState(state4);
         controller4.setProgramLogFile("logFile4.txt");
+
+        // Example 5: Ref int v; new(v, 20); print(ReadHeap(v)); WriteHeap(v, 30); print(ReadHeap(v) + 5);
+
+        Statement example5 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
+                new CompoundStatement(
+                        new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
+                        new CompoundStatement(
+                                new PrintStatement(new ReadHeapExpression()),
+                                new CompoundStatement(
+                                        new WriteHeapStatement("v", new ValueExpression(new IntValue(30))),
+                                        new PrintStatement(new ReadHeapExpression())
+                                )
+                        )
+                )
+        );
+
+        ProgramState state5 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example5);
+        IRepository repository5 = new Repository();
+        IController controller5 = new Controller(repository5, true);
+        controller5.addProgramState(state5);
+        controller5.setProgramLogFile("logFile5.txt");
 
         // ---
 
