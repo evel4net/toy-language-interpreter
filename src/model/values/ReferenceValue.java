@@ -42,6 +42,6 @@ public class ReferenceValue implements Value {
 
     @Override
     public String toString() {
-        return Integer.toString(this.heapAddress) + " : " + this.locationType.toString(); // TODO ?
+        return "(" + Integer.toString(this.heapAddress) + ", " + this.locationType.toString() + ")";
     }
 }

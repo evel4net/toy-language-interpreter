@@ -75,7 +75,10 @@ public class Repository implements IRepository {
             logFile.print(currentProgramState.getOutput().toLogFileString());
 
             logFile.println("FileTable:");
-            logFile.println(currentProgramState.getFileTable().tologFileString());
+            logFile.print(currentProgramState.getFileTable().tologFileString());
+
+            logFile.println("HeapTable:");
+            logFile.println(currentProgramState.getHeapTable().tologFileString());
 
             logFile.flush();
             logFile.close();

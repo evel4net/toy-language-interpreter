@@ -1,7 +1,6 @@
 package model.program_state;
 
 import model.adt.dictionary.KeyNotDefinedException;
-import model.values.StringValue;
 import model.values.Value;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
