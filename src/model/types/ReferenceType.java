@@ -35,6 +35,6 @@ public class ReferenceType implements Type {
 
     @Override
     public String toString() {
-        return "Ref(" + this.innerType.toString() + ")";
+        return "Ref " + this.innerType.toString();
     }
 }
