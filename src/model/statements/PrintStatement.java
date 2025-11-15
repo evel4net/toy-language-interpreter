@@ -13,7 +13,7 @@ public class PrintStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) throws ProgramException {
-        state.getOutput().add(this.expression.evaluate(state.getSymbolsTable(), ));
+        state.getOutput().add(this.expression.evaluate(state.getSymbolsTable(), state.getHeapTable()));
 
         return state;
     }

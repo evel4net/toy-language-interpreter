@@ -19,7 +19,7 @@ public class WhileStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) throws ProgramException {
-        Value expressionValue = this.expression.evaluate(state.getSymbolsTable(), );
+        Value expressionValue = this.expression.evaluate(state.getSymbolsTable(), state.getHeapTable());
 
         if (!(expressionValue instanceof BoolValue)) throw new InvalidTypeException("While expression is not of boolean type.");
 

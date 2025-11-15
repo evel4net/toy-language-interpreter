@@ -18,7 +18,7 @@ public class CloseReadFileStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) throws ProgramException {
-        Value fileName = this.file.evaluate(state.getSymbolsTable(), );
+        Value fileName = this.file.evaluate(state.getSymbolsTable(), state.getHeapTable());
 
         if (!(fileName.getType() instanceof StringType)) throw new InvalidTypeException("File name is not a string");
 

@@ -35,7 +35,7 @@ public class ReadFileStatement implements Statement {
         Type variableType = symbolsTable.getVariableType(this.variableName);
         if (!(variableType instanceof IntType)) throw new InvalidTypeException("Variable in not of integer type.");
 
-        Value fileName = this.file.evaluate(symbolsTable, );
+        Value fileName = this.file.evaluate(symbolsTable, state.getHeapTable());
         if (!(fileName instanceof StringValue)) throw new InvalidTypeException("File name is not of string type.");
 
         try {

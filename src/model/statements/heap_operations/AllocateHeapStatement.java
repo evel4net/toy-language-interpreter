@@ -28,7 +28,7 @@ public class AllocateHeapStatement implements Statement {
 
         if(!(symbolsTable.getVariableType(this.variableName) instanceof ReferenceType)) throw new InvalidTypeException("Variable is not of reference type.");
 
-        Value expressionValue = this.expression.evaluate(symbolsTable, );
+        Value expressionValue = this.expression.evaluate(symbolsTable, state.getHeapTable());
         if (!(expressionValue.getType().equals(symbolsTable.getVariableValue(this.variableName).getType()))) throw new InvalidTypeException("Variable and expression type mismatch.");
 
         int entryAddress = state.getHeapTable().addNewEntry(expressionValue);

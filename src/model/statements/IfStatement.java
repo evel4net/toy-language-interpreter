@@ -19,7 +19,7 @@ public class IfStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) throws ProgramException {
-        Value expressionValue = this.expression.evaluate(state.getSymbolsTable(), );
+        Value expressionValue = this.expression.evaluate(state.getSymbolsTable(), state.getHeapTable());
 
         if (!(expressionValue instanceof BoolValue expressionValue_Bool)) throw new InvalidTypeException("If statement condition is not a boolean.");
 

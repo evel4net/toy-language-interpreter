@@ -155,10 +155,14 @@ public class Main {
                 new CompoundStatement(
                         new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
                         new CompoundStatement(
-                                new PrintStatement(new ReadHeapExpression()),
+                                new PrintStatement(new ReadHeapExpression(new VariableExpression("v"))),
                                 new CompoundStatement(
                                         new WriteHeapStatement("v", new ValueExpression(new IntValue(30))),
-                                        new PrintStatement(new ReadHeapExpression())
+                                        new PrintStatement(
+                                                new ArithmeticExpression(
+                                                        new ReadHeapExpression(new VariableExpression("v")),
+                                                        new ValueExpression(new IntValue(5)),
+                                                        '+'))
                                 )
                         )
                 )
@@ -178,6 +182,7 @@ public class Main {
         menu.addCommand(new RunExampleCommand("2", example2.toString(), controller2));
         menu.addCommand(new RunExampleCommand("3", example3.toString(), controller3));
         menu.addCommand(new RunExampleCommand("4", example4.toString(), controller4));
+        menu.addCommand(new RunExampleCommand("5", example5.toString(), controller5));
 
         menu.show();
     }
@@ -277,20 +282,20 @@ public class Main {
 
         // -----
 
-        ProgramState state1 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example1);
-        ProgramState state2 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example2);
-        ProgramState state3 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example3);
-        ProgramState state4 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example4);
-
-        IRepository repository = new Repository();
-
-        IController controller = new Controller(repository, true);
-        controller.addProgramState(state1);
-        controller.addProgramState(state2);
-        controller.addProgramState(state3);
-        controller.addProgramState(state4);
-
-        ConsoleView view = new ConsoleView(repository, controller);
-        view.start();
+//        ProgramState state1 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example1);
+//        ProgramState state2 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example2);
+//        ProgramState state3 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example3);
+//        ProgramState state4 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), example4);
+//
+//        IRepository repository = new Repository();
+//
+//        IController controller = new Controller(repository, true);
+//        controller.addProgramState(state1);
+//        controller.addProgramState(state2);
+//        controller.addProgramState(state3);
+//        controller.addProgramState(state4);
+//
+//        ConsoleView view = new ConsoleView(repository, controller);
+//        view.start();
     }
 }

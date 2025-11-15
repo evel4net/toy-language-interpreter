@@ -32,7 +32,7 @@ public class WriteHeapStatement implements Statement {
         int variableAddress = ((ReferenceValue) variableValue).getAddress();
         if (!state.getHeapTable().existsAddress(variableAddress)) throw new HeapAddressNotAssociated(variableAddress);
 
-        Value expressionValue = this.expression.evaluate(state.getSymbolsTable(), );
+        Value expressionValue = this.expression.evaluate(state.getSymbolsTable(), state.getHeapTable());
         if (expressionValue.getType().equals(((ReferenceValue) variableValue).getType())) throw new InvalidTypeException("Variable and expression type mismatch.");
 
         state.getHeapTable().updateEntry(variableAddress, expressionValue);
