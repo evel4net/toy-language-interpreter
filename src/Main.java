@@ -18,13 +18,11 @@ import model.values.IntValue;
 import model.values.StringValue;
 import repository.IRepository;
 import repository.Repository;
-import view.ConsoleView;
 import view.TextMenu;
 import view.commands.ExitCommand;
 import view.commands.RunExampleCommand;
 
 public class Main {
-
 
     public static void main(String[] args) {
         // Example 1 : int v; v = 2; Print(v); Print(v <= 1)
@@ -149,6 +147,7 @@ public class Main {
         controller4.setProgramLogFile("logFile4.txt");
 
         // Example 5: Ref int v; new(v, 20); print(ReadHeap(v)); WriteHeap(v, 30); Print(ReadHeap(v) + 5);
+        // -- heap operations example
 
         Statement example5 = new CompoundStatement(
                 new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
@@ -175,6 +174,7 @@ public class Main {
         controller5.setProgramLogFile("logFile5.txt");
 
         // Example 6: int v; v = 4; (While (v > 0) (Print(v); v = v - 1); Print(v)
+        // -- while statement example
 
         Statement example6 = new CompoundStatement(
                 new VariableDeclarationStatement(new IntType(), "v"),
@@ -199,6 +199,32 @@ public class Main {
         controller6.addProgramState(state6);
         controller6.setProgramLogFile("logFile6.txt");
 
+        // Example 7: Ref int v; new(v, 20); Ref Ref int a; new(a, v); new(v, 30); print(ReadHeap(ReadHeap(a)))
+        // -- garbage collector example
+
+        Statement example7 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
+                new CompoundStatement(
+                        new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new ReferenceType(new ReferenceType(new IntType())), "a"),
+                                new CompoundStatement(
+                                        new AllocateHeapStatement("a", new VariableExpression("v")),
+                                        new CompoundStatement(
+                                                new AllocateHeapStatement("v", new ValueExpression(new IntValue(30))),
+                                                new PrintStatement(new ReadHeapExpression(new ReadHeapExpression(new VariableExpression("a"))))
+                                        )
+                                )
+                        )
+                )
+        );
+
+        ProgramState state7 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example7);
+        IRepository repository7 = new Repository();
+        IController controller7 = new Controller(repository7, true);
+        controller7.addProgramState(state7);
+        controller7.setProgramLogFile("logFile7.txt");
+
         // ---
 
         TextMenu menu = new TextMenu();
@@ -209,6 +235,7 @@ public class Main {
         menu.addCommand(new RunExampleCommand("4", example4.toString(), controller4));
         menu.addCommand(new RunExampleCommand("5", example5.toString(), controller5));
         menu.addCommand(new RunExampleCommand("6", example6.toString(), controller6));
+        menu.addCommand(new RunExampleCommand("7", example7.toString(), controller7));
 
         menu.show();
     }

@@ -3,10 +3,10 @@ package model.program_state;
 import model.adt.dictionary.ADTDictionary;
 import model.adt.dictionary.IADTDictionary;
 import model.adt.dictionary.KeyNotDefinedException;
-import model.statements.Statement;
 import model.types.Type;
 import model.values.Value;
 
+import java.util.List;
 import java.util.Map;
 
 public class SymbolsTable {
@@ -30,6 +30,10 @@ public class SymbolsTable {
 
     public void updateVariableValue(String variableName, Value newValue) throws KeyNotDefinedException {
         this.table.update(variableName, newValue);
+    }
+
+    public List<Value> getValues() {
+        return this.table.getValues();
     }
 
     @Override

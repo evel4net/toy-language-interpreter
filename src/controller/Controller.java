@@ -5,11 +5,15 @@ import exceptions.ProgramException;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
 import model.statements.Statement;
+import model.values.Value;
 import repository.IRepository;
+
+import java.util.Map;
 
 public class Controller implements IController {
     private final IRepository repository;
     private boolean displayFlag;
+    private final GarbageCollector garbageCollector = new GarbageCollector();
 
     public Controller(IRepository repository, boolean displayFlag) {
         this.repository = repository;
@@ -44,6 +48,20 @@ public class Controller implements IController {
         while (!executionStack.isEmpty()) {
             this.executeStep(currentProgramState);
             this.repository.logProgramState();
+
+//            Map<Integer, Value> garbageFreeHeap = this.garbageCollector.unsafeCollect(
+//                    this.garbageCollector.getAddressesFromSymbolsTable(currentProgramState.getSymbolsTable()),
+//                    currentProgramState.getHeapTable().getContent()
+//            );
+
+            Map<Integer, Value> garbageFreeHeapContent = this.garbageCollector.collect(
+                    this.garbageCollector.getAddressesFromSymbolsTable(currentProgramState.getSymbolsTable()),
+                    this.garbageCollector.getAddressesFromHeapTable(currentProgramState.getHeapTable()),
+                    currentProgramState.getHeapTable().getContent()
+            );
+
+            currentProgramState.getHeapTable().setContent(garbageFreeHeapContent);
+
             this.displayProgramState(currentProgramState);
         }
 

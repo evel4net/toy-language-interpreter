@@ -5,10 +5,11 @@ import model.values.Value;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HeapTable {
-    private final Map<Integer, Value> heap = new HashMap<>();
+    private Map<Integer, Value> heap = new HashMap<>();
     private int newFreeAddress = 1;
 
     public int addNewEntry(Value value) throws KeyAlreadyExistsException {
@@ -37,6 +38,18 @@ public class HeapTable {
         return this.heap.containsKey(address);
     }
 
+    public Map<Integer, Value> getContent() {
+        return Map.copyOf(this.heap);
+    }
+
+    public void setContent(Map<Integer, Value> content) {
+        this.heap = content;
+    }
+
+    public List<Value> getValues() {
+        return this.heap.values().stream().toList();
+    }
+
     @Override
     public String toString() {
         return this.heap.toString();
@@ -52,7 +65,4 @@ public class HeapTable {
 
         return logFileEntry;
     }
-
-
-
 }
