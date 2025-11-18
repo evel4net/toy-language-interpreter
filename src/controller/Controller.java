@@ -47,25 +47,23 @@ public class Controller implements IController {
 
         while (!executionStack.isEmpty()) {
             this.executeStep(currentProgramState);
+
+            this.cleanHeapContent(currentProgramState);
+
             this.repository.logProgramState();
-
-//            Map<Integer, Value> garbageFreeHeap = this.garbageCollector.unsafeCollect(
-//                    this.garbageCollector.getAddressesFromSymbolsTable(currentProgramState.getSymbolsTable()),
-//                    currentProgramState.getHeapTable().getContent()
-//            );
-
-            Map<Integer, Value> garbageFreeHeapContent = this.garbageCollector.collect(
-                    this.garbageCollector.getAddressesFromSymbolsTable(currentProgramState.getSymbolsTable()),
-                    this.garbageCollector.getAddressesFromHeapTable(currentProgramState.getHeapTable()),
-                    currentProgramState.getHeapTable().getContent()
-            );
-
-            currentProgramState.getHeapTable().setContent(garbageFreeHeapContent);
-
             this.displayProgramState(currentProgramState);
         }
 
         currentProgramState.resetToOriginalProgram();
+    }
+
+    public void cleanHeapContent(ProgramState state) {
+        Map<Integer, Value> garbageFreeHeapContent = this.garbageCollector.collect(
+                this.garbageCollector.getAccessibleAddresses(state.getSymbolsTable(), state.getHeapTable()),
+                state.getHeapTable().getContent()
+        );
+
+        state.getHeapTable().setContent(garbageFreeHeapContent);
     }
 
     @Override

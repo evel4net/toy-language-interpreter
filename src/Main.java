@@ -146,10 +146,66 @@ public class Main {
         controller4.addProgramState(state4);
         controller4.setProgramLogFile("logFile4.txt");
 
-        // Example 5: Ref int v; new(v, 20); print(ReadHeap(v)); WriteHeap(v, 30); Print(ReadHeap(v) + 5);
-        // -- heap operations example
+        // Example 5: Ref int v; new(v, 20); Ref Ref int a; new(a, v); Print(v); Print(a)
+        // -- heap allocation example
 
         Statement example5 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
+                new CompoundStatement(
+                        new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new ReferenceType(new ReferenceType(new IntType())), "a"),
+                                new CompoundStatement(
+                                        new AllocateHeapStatement("a", new VariableExpression("v")),
+                                        new CompoundStatement(
+                                                new PrintStatement(new VariableExpression("v")),
+                                                new PrintStatement(new VariableExpression("a"))
+                                        )
+                                )
+                        )
+                )
+        );
+
+        ProgramState state5 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example5);
+        IRepository repository5 = new Repository();
+        IController controller5 = new Controller(repository5, true);
+        controller5.addProgramState(state5);
+        controller5.setProgramLogFile("logFile5.txt");
+
+        // Example 6: Ref int v; new(v, 20); Ref Ref int a; new(a, v); Print(ReadHeap(v)); Print(ReadHeap(ReadHeap(a)) + 5)
+        // -- heap reading example
+
+        Statement example6 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
+                new CompoundStatement(
+                        new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new ReferenceType(new ReferenceType(new IntType())), "a"),
+                                new CompoundStatement(
+                                        new AllocateHeapStatement("a", new VariableExpression("v")),
+                                        new CompoundStatement(
+                                                new PrintStatement(new ReadHeapExpression(new VariableExpression("v"))),
+                                                new PrintStatement(new ArithmeticExpression(
+                                                        new ReadHeapExpression(new ReadHeapExpression(new VariableExpression("a"))),
+                                                        new ValueExpression(new IntValue(5)),
+                                                        '+')
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+
+        ProgramState state6 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example6);
+        IRepository repository6 = new Repository();
+        IController controller6 = new Controller(repository6, true);
+        controller6.addProgramState(state6);
+        controller6.setProgramLogFile("logFile6.txt");
+
+        // Example 7: Ref int v; new(v, 20); print(ReadHeap(v)); WriteHeap(v, 30); Print(ReadHeap(v) + 5);
+        // -- heap writing example
+
+        Statement example7 = new CompoundStatement(
                 new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
                 new CompoundStatement(
                         new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
@@ -167,16 +223,16 @@ public class Main {
                 )
         );
 
-        ProgramState state5 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example5);
-        IRepository repository5 = new Repository();
-        IController controller5 = new Controller(repository5, true);
-        controller5.addProgramState(state5);
-        controller5.setProgramLogFile("logFile5.txt");
+        ProgramState state7 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example7);
+        IRepository repository7 = new Repository();
+        IController controller7 = new Controller(repository7, true);
+        controller7.addProgramState(state7);
+        controller7.setProgramLogFile("logFile7.txt");
 
-        // Example 6: int v; v = 4; (While (v > 0) (Print(v); v = v - 1); Print(v)
+        // Example 8: int v; v = 4; (While (v > 0) (Print(v); v = v - 1); Print(v)
         // -- while statement example
 
-        Statement example6 = new CompoundStatement(
+        Statement example8 = new CompoundStatement(
                 new VariableDeclarationStatement(new IntType(), "v"),
                 new CompoundStatement(
                         new AssignmentStatement("v", new ValueExpression(new IntValue(4))),
@@ -193,16 +249,16 @@ public class Main {
                 )
         );
 
-        ProgramState state6 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example6);
-        IRepository repository6 = new Repository();
-        IController controller6 = new Controller(repository6, true);
-        controller6.addProgramState(state6);
-        controller6.setProgramLogFile("logFile6.txt");
+        ProgramState state8 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example8);
+        IRepository repository8 = new Repository();
+        IController controller8 = new Controller(repository8, true);
+        controller8.addProgramState(state8);
+        controller8.setProgramLogFile("logFile8.txt");
 
-        // Example 7: Ref int v; new(v, 20); Ref Ref int a; new(a, v); new(v, 30); print(ReadHeap(ReadHeap(a)))
-        // -- garbage collector example
+        // Example 9: Ref int v; new(v, 20); Ref Ref int a; new(a, v); new(v, 30); print(ReadHeap(ReadHeap(a)))
+        // -- garbage collector example --> all values reachable
 
-        Statement example7 = new CompoundStatement(
+        Statement example9 = new CompoundStatement(
                 new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
                 new CompoundStatement(
                         new AllocateHeapStatement("v", new ValueExpression(new IntValue(20))),
@@ -219,11 +275,84 @@ public class Main {
                 )
         );
 
-        ProgramState state7 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example7);
-        IRepository repository7 = new Repository();
-        IController controller7 = new Controller(repository7, true);
-        controller7.addProgramState(state7);
-        controller7.setProgramLogFile("logFile7.txt");
+        ProgramState state9 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example9);
+        IRepository repository9 = new Repository();
+        IController controller9 = new Controller(repository9, true);
+        controller9.addProgramState(state9);
+        controller9.setProgramLogFile("logFile9.txt");
+
+        // Example 10: Ref int x; new(x, 10); Ref int y; new(y, 40); Ref Ref int r; new(r, y); new(y, 50); new(x, 60); Print(ReadHeap(ReadHeap(r)))
+        // -- garbage collector example -> value 10 unreachable
+
+        Statement example10 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "x"),
+                new CompoundStatement(
+                        new AllocateHeapStatement("x", new ValueExpression(new IntValue(10))),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new ReferenceType(new IntType()), "y"),
+                                new CompoundStatement(
+                                        new AllocateHeapStatement("y", new ValueExpression(new IntValue(40))),
+                                        new CompoundStatement(
+                                                new VariableDeclarationStatement(new ReferenceType(new ReferenceType(new IntType())), "r"),
+                                                new CompoundStatement(
+                                                        new AllocateHeapStatement("r", new VariableExpression("y")),
+                                                        new CompoundStatement(
+                                                                new AllocateHeapStatement("y", new ValueExpression(new IntValue(50))),
+                                                                new CompoundStatement(
+                                                                        new AllocateHeapStatement("x", new ValueExpression(new IntValue(60))),
+                                                                        new PrintStatement(new ReadHeapExpression(new ReadHeapExpression(new VariableExpression("r"))))
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+
+        ProgramState state10 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example10);
+        IRepository repository10 = new Repository();
+        IController controller10 = new Controller(repository10, true);
+        controller10.addProgramState(state10);
+        controller10.setProgramLogFile("logFile10.txt");
+
+        // Example 11: Ref int v; new(v, 100); Ref Ref int a; new(a, v); Ref Ref Ref int b; new(b, a); new(v, 200); new(a, v); new(b, a); Print(ReadHeap(ReadHeap(ReadHeap(b)))
+        // -- garbage collector example -> 100, old a and old v unreachable
+
+        Statement example11 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v"),
+                new CompoundStatement(
+                        new AllocateHeapStatement("v", new ValueExpression(new IntValue(100))),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new ReferenceType(new ReferenceType(new IntType())), "a"),
+                                new CompoundStatement(
+                                        new AllocateHeapStatement("a", new VariableExpression("v")),
+                                        new CompoundStatement(
+                                                new VariableDeclarationStatement(new ReferenceType(new ReferenceType(new ReferenceType(new IntType()))), "b"),
+                                                new CompoundStatement(
+                                                        new AllocateHeapStatement("b", new VariableExpression("a")),
+                                                        new CompoundStatement(
+                                                                new AllocateHeapStatement("v", new ValueExpression(new IntValue(200))),
+                                                                new CompoundStatement(
+                                                                        new AllocateHeapStatement("a", new VariableExpression("v")),
+                                                                        new CompoundStatement(
+                                                                                new AllocateHeapStatement("b", new VariableExpression("a")),
+                                                                                new PrintStatement(new ReadHeapExpression(new ReadHeapExpression(new ReadHeapExpression(new VariableExpression("b")))))
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+
+        ProgramState state11 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example11);
+        IRepository repository11 = new Repository();
+        IController controller11 = new Controller(repository11, true);
+        controller11.addProgramState(state11);
+        controller11.setProgramLogFile("logFile11.txt");
 
         // ---
 
@@ -236,6 +365,10 @@ public class Main {
         menu.addCommand(new RunExampleCommand("5", example5.toString(), controller5));
         menu.addCommand(new RunExampleCommand("6", example6.toString(), controller6));
         menu.addCommand(new RunExampleCommand("7", example7.toString(), controller7));
+        menu.addCommand(new RunExampleCommand("8", example8.toString(), controller8));
+        menu.addCommand(new RunExampleCommand("9", example9.toString(), controller9));
+        menu.addCommand(new RunExampleCommand("10", example10.toString(), controller10));
+        menu.addCommand(new RunExampleCommand("11", example11.toString(), controller11));
 
         menu.show();
     }
