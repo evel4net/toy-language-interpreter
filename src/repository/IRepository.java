@@ -12,6 +12,7 @@ public interface IRepository {
 
     void addProgramState(ProgramState state);
     List<ProgramState> getProgramStates();
+    void setProgramStates(List<ProgramState> programStates);
 
     void setLogFile(String logFileName);
     void logProgramState() throws FileNotFoundException;

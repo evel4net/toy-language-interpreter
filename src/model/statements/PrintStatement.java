@@ -15,7 +15,7 @@ public class PrintStatement implements Statement {
     public ProgramState execute(ProgramState state) throws ProgramException {
         state.getOutput().add(this.expression.evaluate(state.getSymbolsTable(), state.getHeapTable()));
 
-        return state;
+        return null;
     }
 
     @Override

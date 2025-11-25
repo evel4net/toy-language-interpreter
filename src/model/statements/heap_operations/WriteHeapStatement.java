@@ -37,7 +37,7 @@ public class WriteHeapStatement implements Statement {
 
         state.getHeapTable().updateEntry(variableAddress, expressionValue);
 
-        return state;
+        return null;
     }
 
     @Override

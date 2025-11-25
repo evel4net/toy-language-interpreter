@@ -36,6 +36,19 @@ public class SymbolsTable {
         return this.table.getValues();
     }
 
+    public SymbolsTable deepCopy() {
+        SymbolsTable copySymbolsTable = new SymbolsTable();
+
+        for (String key : this.table.getKeys()) {
+            Value value = this.table.get(key);
+
+            copySymbolsTable.declareVariable(key, value.getType());
+            copySymbolsTable.updateVariableValue(key, value);
+        }
+
+        return copySymbolsTable;
+    }
+
     @Override
     public String toString() {
         return this.table.toString();

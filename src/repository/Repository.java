@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Repository implements IRepository {
-    private final List<ProgramState> programStates = new ArrayList<>();
+    private List<ProgramState> programStates = new ArrayList<>();
     private int currentProgramIndex;
     private String logFileName;
 
@@ -51,6 +51,11 @@ public class Repository implements IRepository {
     @Override
     public List<ProgramState> getProgramStates() {
         return List.copyOf(this.programStates);
+    }
+
+    @Override
+    public void setProgramStates(List<ProgramState> programStates) {
+        this.programStates = programStates;
     }
 
     @Override

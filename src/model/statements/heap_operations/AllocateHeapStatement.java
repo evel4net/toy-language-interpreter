@@ -34,7 +34,7 @@ public class AllocateHeapStatement implements Statement {
         int entryAddress = state.getHeapTable().addNewEntry(expressionValue);
         symbolsTable.updateVariableValue(this.variableName, new ReferenceValue(entryAddress, expressionValue.getType()));
 
-        return state;
+        return null;
     }
 
     @Override

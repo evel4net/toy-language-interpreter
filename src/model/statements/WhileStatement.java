@@ -30,7 +30,7 @@ public class WhileStatement implements Statement {
             executionStack.push(this.statement.deepCopy());
         }
 
-        return state;
+        return null;
     }
 
     @Override

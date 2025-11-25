@@ -7,7 +7,7 @@ public class NoOperationStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) throws ProgramException {
-        return state;
+        return null;
     }
 
     @Override

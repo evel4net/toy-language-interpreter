@@ -23,7 +23,7 @@ public class VariableDeclarationStatement implements Statement {
 
         symbolsTable.declareVariable(this.variableName, this.type);
 
-        return state;
+        return null;
     }
 
     @Override

@@ -8,7 +8,9 @@ import model.statements.Statement;
 import model.values.Value;
 import repository.IRepository;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Controller implements IController {
     private final IRepository repository;
@@ -23,6 +25,11 @@ public class Controller implements IController {
     @Override
     public void addProgramState(ProgramState state) {
         this.repository.addProgramState(state);
+    }
+
+    @Override
+    public List<ProgramState> removeCompletedProgramStates(List<ProgramState> programStates) {
+        return programStates.stream().filter(ProgramState::isNotCompleted).collect(Collectors.toList());
     }
 
     @Override

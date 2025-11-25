@@ -26,7 +26,7 @@ public class IfStatement implements Statement {
         Statement finalStatement = expressionValue_Bool.getValue() ? this.thenStatement : this.elseStatement;
         state.getExecutionStack().push(finalStatement);
 
-        return state;
+        return null;
     }
 
     @Override

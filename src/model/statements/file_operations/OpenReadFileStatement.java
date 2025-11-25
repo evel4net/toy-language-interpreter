@@ -29,7 +29,7 @@ public class OpenReadFileStatement implements Statement {
 
         filesTable.openFile((StringValue) fileName);
 
-        return state;
+        return null;
     }
 
     @Override

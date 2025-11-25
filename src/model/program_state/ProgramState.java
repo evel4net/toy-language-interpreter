@@ -1,5 +1,6 @@
 package model.program_state;
 
+import model.adt.stack.EmptyStackException;
 import model.statements.Statement;
 
 public class ProgramState {
@@ -82,6 +83,17 @@ public class ProgramState {
         Statement program = this.originalProgram.deepCopy();
 
         this.executionStack.push(program);
+    }
+
+    public Boolean isNotCompleted() {
+        return (!this.executionStack.isEmpty());
+    }
+
+    public ProgramState executeStep() throws EmptyStackException {
+        if (this.executionStack.isEmpty()) throw new EmptyStackException();
+
+        Statement currentStatement = this.executionStack.pop();
+        return currentStatement.execute(this);
     }
 
     @Override

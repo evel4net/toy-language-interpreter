@@ -31,7 +31,7 @@ public class AssignmentStatement implements Statement {
 
         symbolsTable.updateVariableValue(this.variableName, expressionValue);
 
-        return state;
+        return null;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CompoundStatement implements Statement {
         executionStack.push(this.secondStatement);
         executionStack.push(this.firstStatement);
 
-        return state;
+        return null;
     }
 
     @Override

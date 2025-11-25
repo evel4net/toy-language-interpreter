@@ -53,7 +53,7 @@ public class ReadFileStatement implements Statement {
             throw new InvalidTypeException("File line is not an integer value.");
         }
 
-        return state;
+        return null;
     }
 
     @Override

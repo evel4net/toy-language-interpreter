@@ -24,7 +24,7 @@ public class CloseReadFileStatement implements Statement {
 
         state.getFileTable().closeFile((StringValue) fileName);
 
-        return state;
+        return null;
     }
 
     @Override
