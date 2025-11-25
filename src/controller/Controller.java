@@ -1,20 +1,23 @@
 package controller;
 
-import model.adt.stack.EmptyStackException;
 import exceptions.ProgramException;
-import model.program_state.ExecutionStack;
+import model.program_state.HeapTable;
 import model.program_state.ProgramState;
-import model.statements.Statement;
 import model.values.Value;
 import repository.IRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class Controller implements IController {
     private final IRepository repository;
     private boolean displayFlag;
+    private ExecutorService executor;
     private final GarbageCollector garbageCollector = new GarbageCollector();
 
     public Controller(IRepository repository, boolean displayFlag) {
@@ -23,54 +26,71 @@ public class Controller implements IController {
     }
 
     @Override
-    public void addProgramState(ProgramState state) {
-        this.repository.addProgramState(state);
-    }
-
-    @Override
     public List<ProgramState> removeCompletedProgramStates(List<ProgramState> programStates) {
         return programStates.stream().filter(ProgramState::isNotCompleted).collect(Collectors.toList());
     }
 
     @Override
-    public ProgramState executeStep(ProgramState state) throws EmptyStackException {
-        ExecutionStack executionStack = state.getExecutionStack();
+    public void executeStepForAllPrograms(List<ProgramState> programStates) throws ProgramException {
+        programStates.forEach(this.repository::logProgramState);
 
-        if (executionStack.isEmpty()) throw new EmptyStackException();
+        // run concurrently one step for each program
+        List<Callable<ProgramState>> callablesList = programStates.stream()
+                .map(program -> (Callable<ProgramState>)(program::executeStep))
+                .collect(Collectors.toList());
 
-        Statement currentStatement = executionStack.pop();
-        return currentStatement.execute(state);
+        // execute callables --> get list of threads
+        List<ProgramState> threadsProgramStates = null;
+        try {
+            threadsProgramStates = this.executor.invokeAll(callablesList).stream()
+                    .map(future -> {
+                        try {
+                            return future.get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            throw new ProgramException("Concurrent thread execution error: " + e.getMessage());
+                        }
+                    })
+                    .filter(program -> program != null) // result of fork statement
+                    .collect(Collectors.toList());
+        } catch (InterruptedException e) {
+            throw new ProgramException("Concurrent thread execution error.");
+        }
+
+        programStates.addAll(threadsProgramStates);
+
+        programStates.forEach(this.repository::logProgramState);
+
+        this.repository.setProgramStates(programStates);
     }
 
     @Override
-    public void executeProgram() {
-        ProgramState currentProgramState = this.repository.getCurrentProgramState();
-        if (currentProgramState == null) throw new ProgramException("There is no program to execute.");
+    public void executeProgram() throws ProgramException {
+        this.executor = Executors.newFixedThreadPool(2);
 
-        this.repository.logProgramState();
-        this.displayProgramState(currentProgramState);
+        List<ProgramState> programStates = this.removeCompletedProgramStates(this.repository.getProgramStates());
 
-        ExecutionStack executionStack = currentProgramState.getExecutionStack();
+        while (!programStates.isEmpty()) {
+            this.cleanHeapContent(programStates);
 
-        while (!executionStack.isEmpty()) {
-            this.executeStep(currentProgramState);
+            this.executeStepForAllPrograms(programStates);
 
-            this.cleanHeapContent(currentProgramState);
-
-            this.repository.logProgramState();
-            this.displayProgramState(currentProgramState);
+            programStates = this.removeCompletedProgramStates(this.repository.getProgramStates());
         }
 
-        currentProgramState.resetToOriginalProgram();
+        this.executor.shutdownNow();
+
+        this.repository.setProgramStates(programStates);
     }
 
-    public void cleanHeapContent(ProgramState state) {
+    public void cleanHeapContent(List<ProgramState> programStates) {
+        HeapTable heap = programStates.getFirst().getHeapTable();
+
         Map<Integer, Value> garbageFreeHeapContent = this.garbageCollector.collect(
-                this.garbageCollector.getAccessibleAddresses(state.getSymbolsTable(), state.getHeapTable()),
-                state.getHeapTable().getContent()
+                this.garbageCollector.getAccessibleAddresses(programStates.stream().map(ProgramState::getSymbolsTable).collect(Collectors.toList()), heap),
+                heap.getContent()
         );
 
-        state.getHeapTable().setContent(garbageFreeHeapContent);
+        heap.setContent(garbageFreeHeapContent);
     }
 
     @Override

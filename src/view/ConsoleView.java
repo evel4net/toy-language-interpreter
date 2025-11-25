@@ -92,11 +92,11 @@ public class ConsoleView {
         String userOption = this.scanner.next();
         int exampleIndex = Integer.parseInt(userOption);
 
-        try {
-            this.repository.setCurrentProgramState(exampleIndex);
-            this.controller.executeProgram();
-        } catch (InvalidIndexException e) {
-            System.out.println(e.getMessage());
-        }
+//        try {
+//            this.repository.setCurrentProgramState(exampleIndex);
+//            this.controller.executeProgram();
+//        } catch (InvalidIndexException e) {
+//            System.out.println(e.getMessage());
+//        }
     }
 }

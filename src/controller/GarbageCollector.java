@@ -19,8 +19,9 @@ public class GarbageCollector {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public List<Integer> getAccessibleAddresses(SymbolsTable symbolsTable, HeapTable heapTable) {
-        return symbolsTable.getValues().stream()
+    public List<Integer> getAccessibleAddresses(List<SymbolsTable> symbolsTables, HeapTable heapTable) {
+        return symbolsTables.stream()
+                .flatMap(sym -> { return sym.getValues().stream(); })
                 .filter(v -> v instanceof ReferenceValue)
                 .map(v -> (ReferenceValue) v)
                 .flatMap(value -> { // replace each ReferenceValue with a stream containing all accessible addresses from heap
