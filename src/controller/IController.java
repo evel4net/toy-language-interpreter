@@ -9,7 +9,7 @@ public interface IController {
     List<ProgramState> removeCompletedProgramStates(List<ProgramState> programStates);
 
     void executeStepForAllPrograms(List<ProgramState> programStates) throws ProgramException;
-    void executeProgram() throws ProgramException ;
+    void executePrograms() throws ProgramException;
 
     void setDisplayFlag(boolean status);
     void setProgramLogFile(String logFileName);

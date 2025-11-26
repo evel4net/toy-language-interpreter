@@ -26,4 +26,9 @@ public class ForkStatement implements Statement {
     public Statement deepCopy() {
         return new ForkStatement(this.statement.deepCopy());
     }
+
+    @Override
+    public String toString() {
+        return "Fork(" + this.statement.toString() + ")";
+    }
 }

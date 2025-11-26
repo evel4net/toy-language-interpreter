@@ -5,6 +5,7 @@ import model.program_state.HeapTable;
 import model.program_state.ProgramState;
 import model.values.Value;
 import repository.IRepository;
+import repository.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,16 @@ public class Controller implements IController {
 
     @Override
     public List<ProgramState> removeCompletedProgramStates(List<ProgramState> programStates) {
-        return programStates.stream().filter(ProgramState::isNotCompleted).collect(Collectors.toList());
+        return programStates.stream()
+                .filter(ProgramState::isNotCompleted)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void executeStepForAllPrograms(List<ProgramState> programStates) throws ProgramException {
         programStates.forEach(this.repository::logProgramState);
 
-        // run concurrently one step for each program
+        // get list of callables
         List<Callable<ProgramState>> callablesList = programStates.stream()
                 .map(program -> (Callable<ProgramState>)(program::executeStep))
                 .collect(Collectors.toList());
@@ -59,12 +62,13 @@ public class Controller implements IController {
         programStates.addAll(threadsProgramStates);
 
         programStates.forEach(this.repository::logProgramState);
+        programStates.forEach(this::displayProgramState);
 
         this.repository.setProgramStates(programStates);
     }
 
     @Override
-    public void executeProgram() throws ProgramException {
+    public void executePrograms() throws ProgramException {
         this.executor = Executors.newFixedThreadPool(2);
 
         List<ProgramState> programStates = this.removeCompletedProgramStates(this.repository.getProgramStates());

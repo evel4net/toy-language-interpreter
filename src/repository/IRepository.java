@@ -1,9 +1,7 @@
 package repository;
 
-import model.adt.list.InvalidIndexException;
 import exceptions.FileNotFoundException;
 import model.program_state.ProgramState;
-import model.program_state.SymbolsTable;
 
 import java.util.List;
 

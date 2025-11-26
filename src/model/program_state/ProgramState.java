@@ -6,7 +6,7 @@ import model.statements.Statement;
 public class ProgramState {
     private static int availableId = 0;
 
-    private int id;
+    private final int id;
     private ExecutionStack executionStack;
     private SymbolsTable symbolsTable;
     private Output output;
@@ -20,7 +20,7 @@ public class ProgramState {
                         FileTable fileTable,
                         HeapTable heapTable,
                         Statement program) {
-        this.id = this.getNextId();
+        this.id = ProgramState.getNextId();
 
         this.executionStack = executionStack;
         this.symbolsTable = symbolsTable;
@@ -33,7 +33,7 @@ public class ProgramState {
         this.executionStack.push(program);
     }
 
-    private synchronized int getNextId() {
+    private synchronized static int getNextId() {
         ProgramState.availableId++;
         return ProgramState.availableId;
     }

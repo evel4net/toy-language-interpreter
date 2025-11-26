@@ -14,7 +14,7 @@ public class RunExampleCommand extends Command {
     @Override
     public void execute() {
         try {
-            this.controller.executeProgram();
+            this.controller.executePrograms();
         } catch (ProgramException e) {
             System.out.println(e.getMessage());
         }
