@@ -1,9 +1,11 @@
 package model.program_state;
 
 import exceptions.FileAlreadyExistsException;
+import exceptions.InvalidTypeException;
 import model.adt.dictionary.ADTSynchronizedDictionary;
 import model.adt.dictionary.IADTDictionary;
 import model.adt.dictionary.KeyNotDefinedException;
+import model.values.IntValue;
 import model.values.StringValue;
 import exceptions.FileNotFoundException;
 
@@ -12,13 +14,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class FileTable {
-    private final IADTDictionary<StringValue, BufferedReader> table = new ADTSynchronizedDictionary<>();
+    private final IADTDictionary<StringValue, BufferedReader> table = new ADTSynchronizedDictionary<>(); // thread-safe dictionary
 
-    public boolean existsFile(StringValue fileName) {
+    public synchronized boolean existsFile(StringValue fileName) {
         return this.table.exists(fileName);
     }
 
-    public void openFile(StringValue fileName) throws FileNotFoundException, FileAlreadyExistsException {
+    public synchronized void openFile(StringValue fileName) throws FileNotFoundException, FileAlreadyExistsException {
         if (this.existsFile(fileName)) throw new FileAlreadyExistsException(fileName.getValue());
 
         try {
@@ -30,7 +32,24 @@ public class FileTable {
         }
     }
 
-    public void closeFile(StringValue fileName) throws FileNotFoundException{
+    public synchronized IntValue readFile(StringValue fileName) throws FileNotFoundException, InvalidTypeException {
+        try {
+            BufferedReader fileReader = this.getReader((StringValue) fileName);
+            String line = fileReader.readLine();
+
+            IntValue lineValue;
+            if (line == null) lineValue = new IntValue(0);
+            else lineValue = new IntValue(Integer.parseInt(line));
+
+            return lineValue;
+        } catch (KeyNotDefinedException | IOException e) {
+            throw new FileNotFoundException(((StringValue) fileName).getValue());
+        } catch (NumberFormatException e) {
+            throw new InvalidTypeException("File line is not an integer value.");
+        }
+    }
+
+    public synchronized void closeFile(StringValue fileName) throws FileNotFoundException{
         try {
             BufferedReader fileReader = this.getReader(fileName);
             fileReader.close();
@@ -40,7 +59,7 @@ public class FileTable {
         }
     }
 
-    public BufferedReader getReader(StringValue fileName) throws KeyNotDefinedException {
+    public synchronized BufferedReader getReader(StringValue fileName) throws KeyNotDefinedException {
         return this.table.get(fileName);
     }
 

@@ -17,7 +17,7 @@ public class ADTSynchronizedList<T> implements IADTList<T> {
 
     @Override
     public void insertFirst(T value) {
-        this.list.addFirst(value);
+        this.list.add(0, value);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ADTSynchronizedList<T> implements IADTList<T> {
     }
 
     @Override
-    public T remove(T value) throws InvalidIndexException {
+    public synchronized T remove(T value) throws InvalidIndexException {
         int index = this.list.indexOf(value);
 
         try {
@@ -51,7 +51,7 @@ public class ADTSynchronizedList<T> implements IADTList<T> {
     }
 
     @Override
-    public T removeLast() throws InvalidIndexException {
+    public synchronized T removeLast() throws InvalidIndexException {
         return this.removeAt(this.list.size() - 1);
     }
 
@@ -74,7 +74,7 @@ public class ADTSynchronizedList<T> implements IADTList<T> {
     }
 
     @Override
-    public List<T> getAll() {
+    public synchronized List<T> getAll() {
         return List.copyOf(this.list);
     }
 

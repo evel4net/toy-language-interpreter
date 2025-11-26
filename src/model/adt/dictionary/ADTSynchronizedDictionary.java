@@ -15,21 +15,21 @@ public class ADTSynchronizedDictionary<K, V> implements IADTDictionary<K, V> {
     }
 
     @Override
-    public V remove(K key) throws KeyNotDefinedException {
+    public synchronized V remove(K key) throws KeyNotDefinedException {
         if (this.exists(key)) return this.dictionary.remove(key);
 
         throw new KeyNotDefinedException(key.toString());
     }
 
     @Override
-    public V get(K key) throws KeyNotDefinedException {
+    public synchronized V get(K key) throws KeyNotDefinedException {
         if (this.exists(key)) return this.dictionary.get(key);
 
         throw new KeyNotDefinedException(key.toString());
     }
 
     @Override
-    public V update(K key, V newValue) throws KeyNotDefinedException {
+    public synchronized V update(K key, V newValue) throws KeyNotDefinedException {
         if (this.exists(key)) return this.dictionary.replace(key, newValue);
 
         throw new KeyNotDefinedException(key.toString());
@@ -41,17 +41,17 @@ public class ADTSynchronizedDictionary<K, V> implements IADTDictionary<K, V> {
     }
 
     @Override
-    public Map<K, V> getMap() {
+    public synchronized Map<K, V> getMap() {
         return Map.copyOf(this.dictionary);
     }
 
     @Override
-    public List<K> getKeys() {
+    public synchronized List<K> getKeys() {
         return new ArrayList<>(this.dictionary.keySet());
     }
 
     @Override
-    public List<V> getValues() {
+    public synchronized List<V> getValues() {
         return new ArrayList<>(this.dictionary.values());
     }
 

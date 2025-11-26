@@ -1,7 +1,5 @@
 package model.statements.file_operations;
 
-import model.adt.dictionary.KeyNotDefinedException;
-import exceptions.FileNotFoundException;
 import exceptions.InvalidTypeException;
 import exceptions.ProgramException;
 import exceptions.VariableNotDefinedException;
@@ -15,8 +13,6 @@ import model.values.IntValue;
 import model.values.StringValue;
 import model.values.Value;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 
 public class ReadFileStatement implements Statement {
     private final Expression file;
@@ -38,20 +34,8 @@ public class ReadFileStatement implements Statement {
         Value fileName = this.file.evaluate(symbolsTable, state.getHeapTable());
         if (!(fileName instanceof StringValue)) throw new InvalidTypeException("File name is not of string type.");
 
-        try {
-            BufferedReader fileReader = state.getFileTable().getReader((StringValue) fileName);
-            String line = fileReader.readLine();
-
-            IntValue lineValue;
-            if (line == null) lineValue = new IntValue(0);
-            else lineValue = new IntValue(Integer.parseInt(line));
-
-            symbolsTable.updateVariableValue(this.variableName, lineValue);
-        } catch (KeyNotDefinedException | IOException e) {
-            throw new FileNotFoundException(((StringValue) fileName).getValue());
-        } catch (NumberFormatException e) {
-            throw new InvalidTypeException("File line is not an integer value.");
-        }
+        IntValue fileValue = state.getFileTable().readFile((StringValue) fileName);
+        symbolsTable.updateVariableValue(this.variableName, fileValue);
 
         return null;
     }

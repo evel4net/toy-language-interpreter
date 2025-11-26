@@ -12,7 +12,7 @@ public class HeapTable {
     private Map<Integer, Value> heap = new ConcurrentHashMap<>();
     private int newFreeAddress = 1;
 
-    public int addNewEntry(Value value) throws KeyAlreadyExistsException {
+    public synchronized int addNewEntry(Value value) throws KeyAlreadyExistsException {
         int entryAddress = this.newFreeAddress;
         if (this.existsAddress(entryAddress)) throw new KeyAlreadyExistsException("Heap address " + entryAddress + " is already associated to a value.");
 
@@ -22,31 +22,31 @@ public class HeapTable {
         return entryAddress;
     }
 
-    public void updateEntry(int address, Value value) throws KeyNotDefinedException {
+    public synchronized void updateEntry(int address, Value value) throws KeyNotDefinedException {
         if (!this.existsAddress(address)) throw new KeyNotDefinedException(Integer.toString(address));
 
         this.heap.put(address, value);
     }
 
-    public Value getValue(int address) throws KeyNotDefinedException {
+    public synchronized Value getValue(int address) throws KeyNotDefinedException {
         if (!this.existsAddress(address)) throw new KeyNotDefinedException(Integer.toString(address));
 
         return this.heap.get(address);
     }
 
-    public boolean existsAddress(int address) {
+    public synchronized boolean existsAddress(int address) {
         return this.heap.containsKey(address);
     }
 
-    public Map<Integer, Value> getContent() {
+    public synchronized Map<Integer, Value> getContent() {
         return Map.copyOf(this.heap);
     }
 
-    public void setContent(Map<Integer, Value> content) {
+    public synchronized void setContent(Map<Integer, Value> content) {
         this.heap = content;
     }
 
-    public List<Value> getValues() {
+    public synchronized List<Value> getValues() {
         return this.heap.values().stream().toList();
     }
 

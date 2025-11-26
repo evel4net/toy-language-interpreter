@@ -1,10 +1,8 @@
 package model.statements.file_operations;
 
-import exceptions.FileAlreadyExistsException;
 import exceptions.InvalidTypeException;
 import exceptions.ProgramException;
 import model.expressions.Expression;
-import model.program_state.FileTable;
 import model.program_state.ProgramState;
 import model.statements.Statement;
 import model.types.StringType;
@@ -24,10 +22,7 @@ public class OpenReadFileStatement implements Statement {
 
         if (!(fileName.getType() instanceof StringType)) throw new InvalidTypeException("File name is not of string type.");
 
-        FileTable filesTable = state.getFileTable();
-        if (filesTable.existsFile((StringValue) fileName)) throw new FileAlreadyExistsException(((StringValue) fileName).getValue());
-
-        filesTable.openFile((StringValue) fileName);
+        state.getFileTable().openFile((StringValue) fileName);
 
         return null;
     }

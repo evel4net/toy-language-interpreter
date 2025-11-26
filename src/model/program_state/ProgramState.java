@@ -44,40 +44,20 @@ public class ProgramState {
         return this.executionStack;
     }
 
-    public void setExecutionStack(ExecutionStack executionStack) {
-        this.executionStack = executionStack;
-    }
-
     public SymbolsTable getSymbolsTable() {
         return this.symbolsTable;
-    }
-
-    public void setSymbolsTable(SymbolsTable symbolsTable) {
-        this.symbolsTable = symbolsTable;
     }
 
     public Output getOutput() {
         return this.output;
     }
 
-    public void setOutput(Output output) {
-        this.output = output;
-    }
-
     public FileTable getFileTable() {
         return fileTable;
     }
 
-    public void setFileTable(FileTable fileTable) {
-        this.fileTable = fileTable;
-    }
-
     public HeapTable getHeapTable() {
         return heapTable;
-    }
-
-    public void setHeapTable(HeapTable heapTable) {
-        this.heapTable = heapTable;
     }
 
     public Statement getOriginalProgram() {
