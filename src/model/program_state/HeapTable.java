@@ -4,12 +4,12 @@ import model.adt.dictionary.KeyNotDefinedException;
 import model.values.Value;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HeapTable {
-    private Map<Integer, Value> heap = new HashMap<>();
+    private Map<Integer, Value> heap = new ConcurrentHashMap<>();
     private int newFreeAddress = 1;
 
     public int addNewEntry(Value value) throws KeyAlreadyExistsException {

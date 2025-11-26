@@ -1,7 +1,7 @@
 package model.program_state;
 
 import exceptions.FileAlreadyExistsException;
-import model.adt.dictionary.ADTDictionary;
+import model.adt.dictionary.ADTSynchronizedDictionary;
 import model.adt.dictionary.IADTDictionary;
 import model.adt.dictionary.KeyNotDefinedException;
 import model.values.StringValue;
@@ -12,7 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class FileTable {
-    private final IADTDictionary<StringValue, BufferedReader> table = new ADTDictionary<>();
+    private final IADTDictionary<StringValue, BufferedReader> table = new ADTSynchronizedDictionary<>();
 
     public boolean existsFile(StringValue fileName) {
         return this.table.exists(fileName);

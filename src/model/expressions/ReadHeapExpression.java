@@ -3,7 +3,6 @@ package model.expressions;
 import exceptions.HeapAddressNotAssociated;
 import exceptions.InvalidTypeException;
 import exceptions.ProgramException;
-import model.adt.dictionary.KeyNotDefinedException;
 import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
 import model.values.ReferenceValue;
