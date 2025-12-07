@@ -34,8 +34,6 @@ public class Controller implements IController {
 
     @Override
     public void executeStepForAllPrograms(List<ProgramState> programStates) throws ProgramException {
-        programStates.forEach(this.repository::logProgramState);
-
         // get list of callables
         List<Callable<ProgramState>> callablesList = programStates.stream()
                 .map(program -> (Callable<ProgramState>)(program::executeStep))
@@ -71,6 +69,9 @@ public class Controller implements IController {
         this.executor = Executors.newFixedThreadPool(2);
 
         List<ProgramState> programStates = this.removeCompletedProgramStates(this.repository.getProgramStates());
+
+        programStates.forEach(this.repository::logProgramState);
+        programStates.forEach(this::displayProgramState);
 
         while (!programStates.isEmpty()) {
             this.cleanHeapContent(programStates);
