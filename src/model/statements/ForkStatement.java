@@ -1,8 +1,10 @@
 package model.statements;
 
 import exceptions.ProgramException;
+import model.adt.dictionary.IADTDictionary;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
+import model.types.Type;
 
 public class ForkStatement implements Statement {
     private final Statement statement;
@@ -20,6 +22,11 @@ public class ForkStatement implements Statement {
                 state.getFileTable(),
                 state.getHeapTable(),
                 this.statement);
+    }
+
+    @Override
+    public IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        return this.statement.typeCheck(typeEnvironment);
     }
 
     @Override

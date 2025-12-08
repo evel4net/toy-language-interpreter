@@ -3,11 +3,13 @@ package model.statements.file_operations;
 import exceptions.InvalidTypeException;
 import exceptions.ProgramException;
 import exceptions.VariableNotDefinedException;
+import model.adt.dictionary.IADTDictionary;
 import model.expressions.Expression;
 import model.program_state.ProgramState;
 import model.program_state.SymbolsTable;
 import model.statements.Statement;
 import model.types.IntType;
+import model.types.StringType;
 import model.types.Type;
 import model.values.IntValue;
 import model.values.StringValue;
@@ -38,6 +40,17 @@ public class ReadFileStatement implements Statement {
         symbolsTable.updateVariableValue(this.variableName, fileValue);
 
         return null;
+    }
+
+    @Override
+    public IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        Type typeExpression = this.file.typeCheck(typeEnvironment);
+        Type typeVariable = typeEnvironment.get(this.variableName);
+
+        if (typeExpression.equals(new StringType())) {
+            if (typeVariable.equals(new IntType())) return typeEnvironment;
+            else throw new InvalidTypeException("Variable in not of integer type.");
+        } else throw new InvalidTypeException("File name is not of string type.");
     }
 
     @Override

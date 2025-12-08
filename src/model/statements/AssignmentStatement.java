@@ -1,5 +1,7 @@
 package model.statements;
 
+import model.adt.dictionary.ADTDictionary;
+import model.adt.dictionary.IADTDictionary;
 import model.expressions.Expression;
 import exceptions.ProgramException;
 import exceptions.InvalidTypeException;
@@ -32,6 +34,15 @@ public class AssignmentStatement implements Statement {
         symbolsTable.updateVariableValue(this.variableName, expressionValue);
 
         return null;
+    }
+
+    @Override
+    public IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        Type typeVariable = typeEnvironment.get(this.variableName);
+        Type typeExpression = this.expression.typeCheck(typeEnvironment);
+
+        if (typeExpression.equals(typeVariable)) return typeEnvironment;
+        else throw new InvalidTypeException("Assignment type mismatch with variable type.");
     }
 
     @Override

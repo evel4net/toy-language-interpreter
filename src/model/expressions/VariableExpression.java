@@ -2,8 +2,10 @@ package model.expressions;
 
 import exceptions.ProgramException;
 import exceptions.VariableNotDefinedException;
+import model.adt.dictionary.IADTDictionary;
 import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
+import model.types.Type;
 import model.values.Value;
 
 public class VariableExpression implements Expression {
@@ -18,6 +20,11 @@ public class VariableExpression implements Expression {
         if (!symbolsTable.isVariableDefined(this.variableName)) throw new VariableNotDefinedException(this.variableName);
 
         return symbolsTable.getVariableValue(this.variableName);
+    }
+
+    @Override
+    public Type typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        return typeEnvironment.get(this.variableName);
     }
 
     @Override

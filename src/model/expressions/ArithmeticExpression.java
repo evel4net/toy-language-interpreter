@@ -4,9 +4,11 @@ import exceptions.DivisionByZeroException;
 import exceptions.ProgramException;
 import exceptions.InvalidTypeException;
 import exceptions.IncorrectOperatorException;
+import model.adt.dictionary.IADTDictionary;
 import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
 import model.types.IntType;
+import model.types.Type;
 import model.values.IntValue;
 import model.values.Value;
 
@@ -25,10 +27,10 @@ public class ArithmeticExpression implements Expression {
         Value valueLeft, valueRight;
 
         valueLeft = this.expressionLeft.evaluate(symbolsTable, heapTable);
-        if (!(valueLeft.getType() instanceof IntType)) throw new InvalidTypeException("First operand is not an integer.");
+        if (!(valueLeft.getType() instanceof IntType)) throw new InvalidTypeException("Left operand is not of integer type.");
 
         valueRight = this.expressionRight.evaluate(symbolsTable, heapTable);
-        if (!(valueRight.getType() instanceof IntType)) throw new InvalidTypeException("Second operand is not an integer.");
+        if (!(valueRight.getType() instanceof IntType)) throw new InvalidTypeException("Right operand is not of integer type.");
 
         int numberLeft = ((IntValue) valueLeft).getValue();
         int numberRight = ((IntValue) valueRight).getValue();
@@ -42,6 +44,17 @@ public class ArithmeticExpression implements Expression {
         };
 
         return new IntValue(result);
+    }
+
+    @Override
+    public Type typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        Type typeExpressionLeft = this.expressionLeft.typeCheck(typeEnvironment);
+        Type typeExpressionRight = this.expressionRight.typeCheck(typeEnvironment);
+
+        if (typeExpressionLeft.equals(new IntType())) {
+            if (typeExpressionRight.equals(new IntType())) return new IntType();
+            else throw new InvalidTypeException("Right operand is not of integer type.");
+        } else throw new InvalidTypeException("Left operand is not of integer type.");
     }
 
     private int divideOperation(int numberLeft, int numberRight) throws DivisionByZeroException {

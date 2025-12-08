@@ -1,9 +1,13 @@
 package model.statements;
 
+import model.adt.dictionary.ADTDictionary;
+import model.adt.dictionary.IADTDictionary;
 import model.expressions.Expression;
 import exceptions.ProgramException;
 import exceptions.InvalidTypeException;
 import model.program_state.ProgramState;
+import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -27,6 +31,18 @@ public class IfStatement implements Statement {
         state.getExecutionStack().push(finalStatement);
 
         return null;
+    }
+
+    @Override
+    public IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        Type typeExpression = this.expression.typeCheck(typeEnvironment);
+
+        if (typeExpression.equals(new BoolType())) {
+            this.thenStatement.typeCheck(typeEnvironment.deepClone());
+            this.elseStatement.typeCheck(typeEnvironment.deepClone());
+
+            return typeEnvironment;
+        } else throw new InvalidTypeException("If statement condition is not a boolean.");
     }
 
     @Override

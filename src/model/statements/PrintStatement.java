@@ -1,8 +1,11 @@
 package model.statements;
 
+import model.adt.dictionary.ADTDictionary;
+import model.adt.dictionary.IADTDictionary;
 import model.expressions.Expression;
 import exceptions.ProgramException;
 import model.program_state.ProgramState;
+import model.types.Type;
 
 public class PrintStatement implements Statement {
     private final Expression expression;
@@ -16,6 +19,13 @@ public class PrintStatement implements Statement {
         state.getOutput().add(this.expression.evaluate(state.getSymbolsTable(), state.getHeapTable()));
 
         return null;
+    }
+
+    @Override
+    public IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        this.expression.typeCheck(typeEnvironment);
+
+        return typeEnvironment;
     }
 
     @Override

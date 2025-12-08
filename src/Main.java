@@ -1,5 +1,6 @@
 import controller.Controller;
 import controller.IController;
+import model.adt.dictionary.ADTDictionary;
 import model.expressions.*;
 import model.program_state.*;
 import model.statements.*;
@@ -39,6 +40,8 @@ public class Main {
                                 )
                 )
         );
+
+        example1.typeCheck(new ADTDictionary<>());
         ProgramState state1 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example1);
         IRepository repository1 = new Repository(state1, "logFile1.txt");
         IController controller1 = new Controller(repository1, true);
@@ -72,6 +75,7 @@ public class Main {
                 )
         );
 
+        example2.typeCheck(new ADTDictionary<>());
         ProgramState state2 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example2);
         IRepository repository2 = new Repository(state2, "logFile2.txt");
         IController controller2 = new Controller(repository2, true);
@@ -95,6 +99,7 @@ public class Main {
                 )
         );
 
+        example3.typeCheck(new ADTDictionary<>());
         ProgramState state3 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example3);
         IRepository repository3 = new Repository(state3, "logFile3.txt");
         IController controller3 = new Controller(repository3, true);
@@ -134,6 +139,7 @@ public class Main {
                 )
         );
 
+        example4.typeCheck(new ADTDictionary<>());
         ProgramState state4 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example4);
         IRepository repository4 = new Repository(state4, "logFile4.txt");
         IController controller4 = new Controller(repository4, true);
@@ -158,6 +164,7 @@ public class Main {
                 )
         );
 
+        example5.typeCheck(new ADTDictionary<>());
         ProgramState state5 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example5);
         IRepository repository5 = new Repository(state5, "logFile5.txt");
         IController controller5 = new Controller(repository5, true);
@@ -186,6 +193,7 @@ public class Main {
                 )
         );
 
+        example6.typeCheck(new ADTDictionary<>());
         ProgramState state6 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example6);
         IRepository repository6 = new Repository(state6, "logFile6.txt");
         IController controller6 = new Controller(repository6, true);
@@ -211,6 +219,7 @@ public class Main {
                 )
         );
 
+        example7.typeCheck(new ADTDictionary<>());
         ProgramState state7 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example7);
         IRepository repository7 = new Repository(state7, "logFile7.txt");
         IController controller7 = new Controller(repository7, true);
@@ -235,6 +244,7 @@ public class Main {
                 )
         );
 
+        example8.typeCheck(new ADTDictionary<>());
         ProgramState state8 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example8);
         IRepository repository8 = new Repository(state8, "logFile8.txt");
         IController controller8 = new Controller(repository8, true);
@@ -259,6 +269,7 @@ public class Main {
                 )
         );
 
+        example9.typeCheck(new ADTDictionary<>());
         ProgramState state9 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example9);
         IRepository repository9 = new Repository(state9, "logFile9.txt");
         IController controller9 = new Controller(repository9, true);
@@ -292,6 +303,7 @@ public class Main {
                 )
         );
 
+        example10.typeCheck(new ADTDictionary<>());
         ProgramState state10 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example10);
         IRepository repository10 = new Repository(state10, "logFile10.txt");
         IController controller10 = new Controller(repository10, true);
@@ -328,6 +340,7 @@ public class Main {
                 )
         );
 
+        example11.typeCheck(new ADTDictionary<>());
         ProgramState state11 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example11);
         IRepository repository11 = new Repository(state11, "logFile11.txt");
         IController controller11 = new Controller(repository11, true);
@@ -364,6 +377,8 @@ public class Main {
                         )
                 )
         );
+
+        example12.typeCheck(new ADTDictionary<>());
         ProgramState state12 = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example12);
         IRepository repository12 = new Repository(state12, "logFile12.txt");
         IController controller12 = new Controller(repository12, true);

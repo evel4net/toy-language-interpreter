@@ -3,9 +3,11 @@ package model.expressions;
 import exceptions.ProgramException;
 import exceptions.InvalidTypeException;
 import exceptions.IncorrectOperatorException;
+import model.adt.dictionary.IADTDictionary;
 import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
 import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -26,10 +28,10 @@ public class LogicExpression implements Expression {
         Value valueLeft, valueRight;
 
         valueLeft = this.expressionLeft.evaluate(symbolsTable, heapTable);
-        if (!(valueLeft.getType() instanceof BoolType)) throw new InvalidTypeException("First operand is not a boolean.");
+        if (!(valueLeft.getType() instanceof BoolType)) throw new InvalidTypeException("Left operand is not of boolean type.");
 
         valueRight = this.expressionRight.evaluate(symbolsTable, heapTable);
-        if (!(valueRight.getType() instanceof BoolType)) throw new InvalidTypeException("Second operand is not a boolean.");
+        if (!(valueRight.getType() instanceof BoolType)) throw new InvalidTypeException("Right operand is not of boolean type.");
 
         boolean boolLeft = ((BoolValue)valueLeft).getValue();
         boolean boolRight = ((BoolValue)valueRight).getValue();
@@ -41,6 +43,17 @@ public class LogicExpression implements Expression {
         };
 
         return new BoolValue(result);
+    }
+
+    @Override
+    public Type typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        Type typeExpressionLeft = this.expressionLeft.typeCheck(typeEnvironment);
+        Type typeExpressionRight = this.expressionRight.typeCheck(typeEnvironment);
+
+        if (typeExpressionLeft.equals(new BoolType())) {
+            if (typeExpressionRight.equals(new BoolType())) return new BoolType();
+            else throw new InvalidTypeException("Right operand is not of boolean type.");
+        } else throw new InvalidTypeException("Left operand is not of boolean type.");
     }
 
     @Override

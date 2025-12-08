@@ -2,9 +2,12 @@ package model.statements;
 
 import exceptions.InvalidTypeException;
 import exceptions.ProgramException;
+import model.adt.dictionary.IADTDictionary;
 import model.expressions.Expression;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
+import model.types.BoolType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
@@ -31,6 +34,18 @@ public class WhileStatement implements Statement {
         }
 
         return null;
+    }
+
+    @Override
+    public IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        Type typeExpression = this.expression.typeCheck(typeEnvironment);
+
+        if (typeExpression.equals(new BoolType())) {
+            this.statement.typeCheck(typeEnvironment.deepClone());
+
+            return typeEnvironment;
+        }
+        else throw new InvalidTypeException("While expression is not of boolean type.");
     }
 
     @Override

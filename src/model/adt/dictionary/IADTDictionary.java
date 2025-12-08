@@ -17,5 +17,6 @@ public interface IADTDictionary<K, V> {
     boolean isEmpty();
     int getSize();
 
+    IADTDictionary<K, V> deepClone();
     String toString();
 }

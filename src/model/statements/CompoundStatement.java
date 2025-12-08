@@ -1,7 +1,11 @@
 package model.statements;
 
+import exceptions.ProgramException;
+import model.adt.dictionary.ADTDictionary;
+import model.adt.dictionary.IADTDictionary;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
+import model.types.Type;
 
 public class CompoundStatement implements Statement {
     private final Statement firstStatement, secondStatement;
@@ -19,6 +23,11 @@ public class CompoundStatement implements Statement {
         executionStack.push(this.firstStatement);
 
         return null;
+    }
+
+    @Override
+    public IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        return this.secondStatement.typeCheck(this.firstStatement.typeCheck(typeEnvironment));
     }
 
     @Override

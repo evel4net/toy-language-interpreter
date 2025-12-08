@@ -66,6 +66,17 @@ public class ADTDictionary<K, V> implements IADTDictionary<K, V> {
     }
 
     @Override
+    public IADTDictionary<K, V> deepClone() {
+        ADTDictionary<K, V> cloneDictionary = new ADTDictionary<>();
+
+        for (K key : this.dictionary.keySet()) {
+            cloneDictionary.insert(key, this.dictionary.get(key));
+        }
+
+        return cloneDictionary;
+    }
+
+    @Override
     public String toString() {
         return this.dictionary.toString();
     }

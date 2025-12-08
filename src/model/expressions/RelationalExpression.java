@@ -3,9 +3,12 @@ package model.expressions;
 import exceptions.IncorrectOperatorException;
 import exceptions.InvalidTypeException;
 import exceptions.ProgramException;
+import model.adt.dictionary.IADTDictionary;
 import model.program_state.HeapTable;
 import model.program_state.SymbolsTable;
+import model.types.BoolType;
 import model.types.IntType;
+import model.types.Type;
 import model.values.BoolValue;
 import model.values.IntValue;
 import model.values.Value;
@@ -23,10 +26,10 @@ public class RelationalExpression implements Expression {
     @Override
     public Value evaluate(SymbolsTable symbolsTable, HeapTable heapTable) throws ProgramException {
         Value leftValue = this.expressionLeft.evaluate(symbolsTable, heapTable);
-        if (!(leftValue.getType() instanceof IntType)) throw new InvalidTypeException("Left relational expression is not of integer type.");
+        if (!(leftValue.getType() instanceof IntType)) throw new InvalidTypeException("Left operand is not of integer type.");
 
         Value rightValue = this.expressionRight.evaluate(symbolsTable, heapTable);
-        if (!(rightValue.getType() instanceof IntType)) throw new InvalidTypeException("Right relational expression is not of integer type.");
+        if (!(rightValue.getType() instanceof IntType)) throw new InvalidTypeException("Right operand is not of integer type.");
 
         int leftNumber = ((IntValue) leftValue).getValue();
         int rightNumber = ((IntValue) rightValue).getValue();
@@ -42,6 +45,17 @@ public class RelationalExpression implements Expression {
         };
 
         return new BoolValue(result);
+    }
+
+    @Override
+    public Type typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException {
+        Type typeExpressionLeft = this.expressionLeft.typeCheck(typeEnvironment);
+        Type typeExpressionRight = this.expressionRight.typeCheck(typeEnvironment);
+
+        if (typeExpressionLeft.equals(new IntType())) {
+            if (typeExpressionRight.equals(new IntType())) return new BoolType();
+            else throw new InvalidTypeException("Right operand is not of integer type.");
+        } else throw new InvalidTypeException("Left operand is not of integer type.");
     }
 
     @Override
