@@ -1,6 +1,5 @@
 import view.ExamplesLoader;
 import view.GUI;
-import view.TextView;
 
 public class Main {
     public static void main(String[] args) {
