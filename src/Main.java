@@ -1,11 +1,11 @@
 import view.ExamplesLoader;
-import view.GUI;
+import view.GUIView;
 
 public class Main {
     public static void main(String[] args) {
         ExamplesLoader loader = new ExamplesLoader();
 
-        GUI.setExamplesLoader(loader);
-        GUI.run(args);
+        GUIView.setExamplesLoader(loader);
+        GUIView.run(args);
     }
 }

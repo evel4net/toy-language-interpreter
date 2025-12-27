@@ -12,6 +12,8 @@ import exceptions.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class FileTable {
     private final IADTDictionary<StringValue, BufferedReader> table = new ADTSynchronizedDictionary<>(); // thread-safe dictionary
@@ -61,6 +63,10 @@ public class FileTable {
 
     public synchronized BufferedReader getReader(StringValue fileName) throws KeyNotDefinedException {
         return this.table.get(fileName);
+    }
+
+    public List<StringValue> getContent() {
+        return this.table.getKeys();
     }
 
     @Override

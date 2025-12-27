@@ -5,6 +5,8 @@ import model.adt.stack.EmptyStackException;
 import model.adt.stack.IADTStack;
 import model.statements.Statement;
 
+import java.util.List;
+
 public class ExecutionStack {
     private final IADTStack<Statement> stack = new ADTStack<>();
 
@@ -18,6 +20,10 @@ public class ExecutionStack {
 
     public boolean isEmpty() {
         return this.stack.isEmpty();
+    }
+
+    public List<Statement> getContent() {
+        return this.stack.getAll();
     }
 
     @Override

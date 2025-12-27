@@ -4,11 +4,17 @@ import model.adt.list.ADTSynchronizedList;
 import model.adt.list.IADTList;
 import model.values.Value;
 
+import java.util.List;
+
 public class Output {
     private final IADTList<Value> list = new ADTSynchronizedList<>(); // thread-safe list
 
     public void add(Value value) {
         this.list.insertLast(value);
+    }
+
+    public List<Value> getContent() {
+        return this.list.getAll();
     }
 
     @Override

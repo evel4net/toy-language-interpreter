@@ -36,6 +36,10 @@ public class SymbolsTable {
         return this.table.getValues();
     }
 
+    public Map<String, Value> getContent() {
+        return this.table.getMap();
+    }
+
     public SymbolsTable deepCopy() {
         SymbolsTable copySymbolsTable = new SymbolsTable();
 

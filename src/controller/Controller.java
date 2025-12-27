@@ -23,17 +23,27 @@ public class Controller implements IController {
     public Controller(IRepository repository, boolean displayFlag) {
         this.repository = repository;
         this.displayFlag = displayFlag;
+
+        this.executor = Executors.newFixedThreadPool(2);
     }
 
     @Override
-    public List<ProgramState> removeCompletedProgramStates(List<ProgramState> programStates) {
-        return programStates.stream()
+    public List<ProgramState> removeCompletedProgramStates() {
+        return this.repository.getProgramStates().stream()
                 .filter(ProgramState::isNotCompleted)
                 .collect(Collectors.toList());
     }
+//    @Override
+//    public List<ProgramState> removeCompletedProgramStates(List<ProgramState> programStates) {
+//        return programStates.stream()
+//                .filter(ProgramState::isNotCompleted)
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public void executeStepForAllPrograms(List<ProgramState> programStates) throws ProgramException {
+        this.cleanHeapContent(programStates);
+
         // get list of callables
         List<Callable<ProgramState>> callablesList = programStates.stream()
                 .map(program -> (Callable<ProgramState>)(program::executeStep))
@@ -66,24 +76,27 @@ public class Controller implements IController {
 
     @Override
     public void executePrograms() throws ProgramException {
-        this.executor = Executors.newFixedThreadPool(2);
+//        this.executor = Executors.newFixedThreadPool(2);
 
-        List<ProgramState> programStates = this.removeCompletedProgramStates(this.repository.getProgramStates());
+        List<ProgramState> programStates = this.removeCompletedProgramStates();
 
         programStates.forEach(this.repository::logProgramState);
         programStates.forEach(this::displayProgramState);
 
         while (!programStates.isEmpty()) {
-            this.cleanHeapContent(programStates);
-
             this.executeStepForAllPrograms(programStates);
 
-            programStates = this.removeCompletedProgramStates(this.repository.getProgramStates());
+            programStates = this.removeCompletedProgramStates();
         }
 
-        this.executor.shutdownNow();
+        this.finishProgramExecution();
+    }
 
-        this.repository.setProgramStates(programStates);
+    @Override
+    public void finishProgramExecution() {
+        this.executor.shutdown();
+
+        this.repository.setProgramStates(this.removeCompletedProgramStates());
     }
 
     public void cleanHeapContent(List<ProgramState> programStates) {
@@ -110,5 +123,10 @@ public class Controller implements IController {
     @Override
     public void displayProgramState(ProgramState state) {
         if (this.displayFlag) System.out.println(state.toString());
+    }
+
+    @Override
+    public List<ProgramState> getProgramStates() {
+        return this.repository.getProgramStates();
     }
 }

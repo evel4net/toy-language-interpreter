@@ -368,19 +368,19 @@ public class ExamplesLoader {
         this.controllers.addLast(controller);
     }
 
-    public String getExampleString(int index) {
+    public String getString(int index) {
         return this.examples.get(index);
     }
 
-    public IController getExampleController(int index) {
+    public IController getController(int index) {
         return this.controllers.get(index);
     }
 
-    public List<String> getAllExampleStrings() {
+    public List<String> getAllStrings() {
         return List.copyOf(this.examples);
     }
 
-    public List<IController> getAllExampleControllers() {
+    public List<IController> getAllControllers() {
         return List.copyOf(this.controllers);
     }
 }
