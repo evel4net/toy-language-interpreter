@@ -12,11 +12,21 @@ import java.util.List;
 
 public class Repository implements IRepository {
     private List<ProgramState> programStates = new ArrayList<>();
+    private final ProgramState originalState;
     private String logFileName;
 
     public Repository(ProgramState originalState, String logFileName) {
+        this.originalState = originalState;
         this.programStates.add(originalState);
         this.setLogFile(logFileName);
+    }
+
+    @Override
+    public void resetToOriginalProgram() {
+        this.originalState.resetToOriginalProgram();
+
+        this.programStates = new ArrayList<>();
+        this.programStates.add(originalState);
     }
 
     @Override

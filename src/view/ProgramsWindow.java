@@ -1,44 +1,43 @@
 package view;
 
-import exceptions.ProgramException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ProgramsWindow {
-    private ExamplesLoader examplesLoader;
+    private final ExamplesLoader examplesLoader;
 
     public ProgramsWindow(ExamplesLoader loader) {
         this.examplesLoader = loader;
     }
 
     public void start(Stage stage) {
-        HBox root = new HBox(4);
+        VBox root = new VBox(1);
         root.setPadding(new Insets(10));
         root.setSpacing(10);
+
+        Text title = new Text("Select program to execute");
 
         ObservableList<String> programs = FXCollections.observableArrayList(this.examplesLoader.getAllStrings());
         ListView<String> programsList = new ListView<>(programs);
         programsList.getSelectionModel().select(0);
-//        TextField programText = new TextField("My program ...");
-//        programText.setEditable(false);
 
-        Button runButton = new Button("Run");
-        runButton.setOnAction(actionEvent -> {
+        Button selectButton = new Button("OK");
+        selectButton.setOnAction(actionEvent -> {
             int index = programsList.getSelectionModel().getSelectedIndex();
-            if (index < 0) throw new ProgramException("No program selected.");
+            if (index < 0) return;
 
-//            this.setMainView(stage, this.examplesLoader.getController(index));
             ExecutionWindow programWindow = new ExecutionWindow(this.examplesLoader.getController(index));
             programWindow.start();
         });
 
-        root.getChildren().addAll(programsList, runButton);
+        root.getChildren().addAll(title, programsList, selectButton);
 
         Scene scene = new Scene(root, 500, 500);
         stage.setScene(scene);

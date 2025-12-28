@@ -11,6 +11,7 @@ public interface IController {
     void executeStepForAllPrograms(List<ProgramState> programStates) throws ProgramException;
     void executePrograms() throws ProgramException;
     void finishProgramExecution();
+    void resetToOriginalProgram();
 
     void setDisplayFlag(boolean status);
     void setProgramLogFile(String logFileName);

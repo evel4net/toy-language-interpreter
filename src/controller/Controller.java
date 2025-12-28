@@ -18,13 +18,14 @@ public class Controller implements IController {
     private final IRepository repository;
     private boolean displayFlag;
     private ExecutorService executor;
-    private final GarbageCollector garbageCollector = new GarbageCollector();
+    private final GarbageCollector garbageCollector;
 
     public Controller(IRepository repository, boolean displayFlag) {
         this.repository = repository;
         this.displayFlag = displayFlag;
 
         this.executor = Executors.newFixedThreadPool(2);
+        this.garbageCollector = new GarbageCollector();
     }
 
     @Override
@@ -97,6 +98,15 @@ public class Controller implements IController {
         this.executor.shutdown();
 
         this.repository.setProgramStates(this.removeCompletedProgramStates());
+    }
+
+    @Override
+    public void resetToOriginalProgram() {
+        if (this.executor.isShutdown()) {
+            this.executor = Executors.newFixedThreadPool(2);
+        }
+
+        this.repository.resetToOriginalProgram();
     }
 
     public void cleanHeapContent(List<ProgramState> programStates) {

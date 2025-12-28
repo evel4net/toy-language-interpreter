@@ -6,6 +6,7 @@ import model.program_state.ProgramState;
 import java.util.List;
 
 public interface IRepository {
+    void resetToOriginalProgram();
     List<ProgramState> getProgramStates();
     void setProgramStates(List<ProgramState> programStates);
 
