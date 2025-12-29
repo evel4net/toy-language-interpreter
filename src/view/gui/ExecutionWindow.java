@@ -1,4 +1,4 @@
-package view;
+package view.gui;
 
 import controller.IController;
 import exceptions.ProgramException;
@@ -57,7 +57,7 @@ public class ExecutionWindow {
     @FXML
     private final Button runOneStepButton = new Button("Run one step");
     @FXML
-    private final Button runButton = new Button("Run");
+    private final Button runAllStepsButton = new Button("Run");
 
     public ExecutionWindow(IController controller) {
         this.controller = controller;
@@ -84,7 +84,7 @@ public class ExecutionWindow {
         program.setWrapText(true);
         program.setPrefWidth(300);
 
-        // --- execution information
+        // --- grid for execution information
 
         GridPane grid = new GridPane();
         grid.setPrefWidth(700);
@@ -94,9 +94,9 @@ public class ExecutionWindow {
 
         // --- shared resources
 
-        Text sharedText = new Text("Shared Resources");
-        sharedText.setStyle("-fx-font-weight: bold;");
-        grid.add(sharedText, 0, 0);
+        Text sharedResourcesText = new Text("Shared Resources");
+        sharedResourcesText.setStyle("-fx-font-weight: bold;");
+        grid.add(sharedResourcesText, 0, 0);
 
         // HEAP TABLE
         Text heapTableText = new Text("Heap Table");
@@ -137,9 +137,9 @@ public class ExecutionWindow {
 
         // --- current state resources
 
-        Text currentStateText = new Text("Current State Data");
-        currentStateText.setStyle("-fx-font-weight: bold;");
-        grid.add(currentStateText, 0, 4);
+        Text currentStateDataText = new Text("Current State Data");
+        currentStateDataText.setStyle("-fx-font-weight: bold;");
+        grid.add(currentStateDataText, 0, 4);
 
         // PROGRAM STATES IDS
         Text programStatesIDText = new Text("Program States Identifiers");
@@ -147,18 +147,7 @@ public class ExecutionWindow {
         this.programStatesID.setEditable(false);
 
         this.programStatesID.setOnMouseClicked(mouseEvent -> {
-            if (this.programStatesID.getSelectionModel().getSelectedIndex() < 0) return;
-
-            int stateID = this.programStatesID.getSelectionModel().getSelectedItem();
-
-            if (stateID != this.currentProgramState.getId()) {
-                this.currentProgramState = this.controller.getProgramStates().stream()
-                        .filter(state -> state.getId() == stateID)
-                        .findFirst()
-                        .orElse(null);
-
-                this.loadCurrentProgramState();
-            }
+            this.onProgramStatesListItemClick();
         });
 
         grid.add(programStatesIDText, 0, 5);
@@ -202,21 +191,17 @@ public class ExecutionWindow {
         buttonsBox.setSpacing(10);
 
         grid.add(this.runOneStepButton, 0, 7);
-        grid.add(this.runButton, 1, 7);
+        grid.add(this.runAllStepsButton, 1, 7);
 
         this.runOneStepButton.setOnAction(actionEvent -> {
-            this.runOneStepEvent();
-
-            this.refresh();
+            this.onRunOneStepButtonClick();
         });
 
-        this.runButton.setOnAction(actionEvent -> {
-            this.runEvent();
-
-            this.refresh();
+        this.runAllStepsButton.setOnAction(actionEvent -> {
+            this.onRunAllStepsButtonClick();
         });
 
-        buttonsBox.getChildren().addAll(this.runOneStepButton, this.runButton);
+        buttonsBox.getChildren().addAll(this.runOneStepButton, this.runAllStepsButton);
         HBox.setHgrow(buttonsBox, Priority.ALWAYS);
         buttonsBox.setPrefWidth(160);
 
@@ -234,7 +219,24 @@ public class ExecutionWindow {
         stage.show();
     }
 
-    private void runOneStepEvent() {
+    // CLICK EVENTS
+
+    private void onProgramStatesListItemClick() {
+        if (this.programStatesID.getSelectionModel().getSelectedIndex() < 0) return;
+
+        int stateID = this.programStatesID.getSelectionModel().getSelectedItem();
+
+        if (stateID != this.currentProgramState.getId()) {
+            this.currentProgramState = this.controller.getProgramStates().stream()
+                    .filter(state -> state.getId() == stateID)
+                    .findFirst()
+                    .orElse(null);
+
+            this.loadCurrentProgramState();
+        }
+    }
+
+    private void onRunOneStepButtonClick() {
         List<ProgramState> programStates = this.controller.removeCompletedProgramStates();
 
         if (!programStates.isEmpty()) {
@@ -247,16 +249,22 @@ public class ExecutionWindow {
 
                 this.disableButtons();
             }
-        } else {
+
+            programStates = this.controller.removeCompletedProgramStates();
+        }
+
+        if (programStates.isEmpty()){
             this.controller.finishProgramExecution();
 
             this.disableButtons();
 
             this.displayConsoleMessage("Program execution finished.", false);
         }
+
+        this.refresh();
     }
 
-    private void runEvent() {
+    private void onRunAllStepsButtonClick() {
         try {
             this.controller.executePrograms();
 
@@ -265,12 +273,13 @@ public class ExecutionWindow {
             this.displayConsoleMessage(e.getMessage(), true);
         } finally {
             this.disableButtons();
+            this.refresh();
         }
     }
 
     private void disableButtons() {
         this.runOneStepButton.setDisable(true);
-        this.runButton.setDisable(true);
+        this.runAllStepsButton.setDisable(true);
     }
 
     private void displayConsoleMessage(String message, boolean isError) {
@@ -281,6 +290,8 @@ public class ExecutionWindow {
 
         this.consoleBox.setStyle("-fx-text-fill: " + color + ";");
     }
+
+    // LOADING CONTROLS
 
     public void refresh() {
         this.loadHeapTable();

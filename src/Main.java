@@ -1,5 +1,5 @@
 import view.ExamplesLoader;
-import view.GUIView;
+import view.gui.GUIView;
 
 public class Main {
     public static void main(String[] args) {

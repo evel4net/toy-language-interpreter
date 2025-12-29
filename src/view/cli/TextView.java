@@ -1,8 +1,9 @@
-package view;
+package view.cli;
 
 import controller.IController;
-import view.commands.ExitCommand;
-import view.commands.RunExampleCommand;
+import view.ExamplesLoader;
+import view.cli.commands.ExitCommand;
+import view.cli.commands.RunExampleCommand;
 
 public class TextView {
     public static void run(ExamplesLoader loader) {

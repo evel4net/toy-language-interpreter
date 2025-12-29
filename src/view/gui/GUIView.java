@@ -1,7 +1,8 @@
-package view;
+package view.gui;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import view.ExamplesLoader;
 
 public class GUIView extends Application {
     private static ExamplesLoader examplesLoader;
