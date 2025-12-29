@@ -60,4 +60,9 @@ public class WriteHeapStatement implements Statement {
     public String toString() {
         return "WriteHeap(" + this.variableName + ", " + this.expression.toString() + ")";
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.toString() + ";";
+    }
 }

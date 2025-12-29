@@ -46,4 +46,9 @@ public class OpenReadFileStatement implements Statement {
     public String toString() {
         return "OpenReadFile(" + this.file.toString()+")";
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.toString() + ";";
+    }
 }

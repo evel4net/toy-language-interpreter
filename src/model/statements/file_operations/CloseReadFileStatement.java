@@ -46,4 +46,9 @@ public class CloseReadFileStatement implements Statement {
     public String toString() {
         return "CloseReadFile(" + this.file.toString()+")";
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.toString() + ";";
+    }
 }

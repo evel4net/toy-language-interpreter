@@ -11,6 +11,9 @@ import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class IfStatement implements Statement {
     private final Expression expression;
     private final Statement thenStatement, elseStatement;
@@ -54,5 +57,19 @@ public class IfStatement implements Statement {
     public String toString() {
         return "If (" + this.expression.toString() + ") then (" + this.thenStatement.toString() +
                 ") else (" + this.elseStatement.toString() + ")";
+    }
+
+    @Override
+    public String toPrettyString() {
+        String thenStatementString = Arrays.stream(this.thenStatement.toPrettyString().split("\n"))
+                .map(str ->  { return "\t" + str; })
+                .collect(Collectors.joining("\n"));
+
+        String elseStatementString = Arrays.stream(this.elseStatement.toPrettyString().split("\n"))
+                .map(str -> { return "\t" + str; })
+                .collect(Collectors.joining("\n"));
+
+        return "If (" + this.expression.toString() + ") then (\n" + thenStatementString +
+                "\n) else (\n" + elseStatementString + "\n);";
     }
 }

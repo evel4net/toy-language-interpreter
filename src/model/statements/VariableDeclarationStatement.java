@@ -44,4 +44,9 @@ public class VariableDeclarationStatement implements Statement {
     public String toString() {
         return this.type.toString() + " " + this.variableName;
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.toString() + ";";
+    }
 }

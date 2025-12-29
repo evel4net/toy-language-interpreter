@@ -62,4 +62,9 @@ public class ReadFileStatement implements Statement {
     public String toString() {
         return "ReadFile(" + this.file.toString()+", " + this.variableName +")";
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.toString() + ";";
+    }
 }

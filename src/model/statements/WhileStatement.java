@@ -11,6 +11,9 @@ import model.types.Type;
 import model.values.BoolValue;
 import model.values.Value;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class WhileStatement implements Statement {
     private final Expression expression;
     private final Statement statement;
@@ -55,6 +58,15 @@ public class WhileStatement implements Statement {
 
     @Override
     public String toString() {
-        return "While(" + this.expression.toString() + ") (" + this.statement.toString() + ")";
+        return "While (" + this.expression.toString() + ") (" + this.statement.toString() + ")";
+    }
+
+    @Override
+    public String toPrettyString() {
+        String statementString = Arrays.stream(this.statement.toPrettyString().split("\n"))
+                .map(str -> { return "\t" + str; })
+                .collect(Collectors.joining("\n"));
+
+        return "While (" + this.expression.toString() + ") (\n" + statementString + "\n);";
     }
 }

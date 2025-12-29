@@ -26,4 +26,9 @@ public class NoOperationStatement implements Statement {
     public String toString() {
         return "NOP";
     }
+
+    @Override
+    public String toPrettyString() {
+        return "NOP;";
+    }
 }

@@ -47,16 +47,17 @@ public class ExecutionWindow {
     @FXML
     private final TableColumn<Pair<String, String>, String> symbolsTableView_valueColumn = new TableColumn<>("Value");
 
-    @FXML
-    private final Button runOneStepButton = new Button("Run one step");
-    @FXML
-    private final Button runButton = new Button("Run");
 
     @FXML
     private final ListView<String> executionStackListView = new ListView<>();
 
     @FXML
     private final TextArea consoleBox = new TextArea();
+
+    @FXML
+    private final Button runOneStepButton = new Button("Run one step");
+    @FXML
+    private final Button runButton = new Button("Run");
 
     public ExecutionWindow(IController controller) {
         this.controller = controller;
@@ -78,7 +79,7 @@ public class ExecutionWindow {
 
         // --- display program
 
-        TextArea program = new TextArea(this.controller.getProgramStates().get(0).getOriginalProgram().toString()); // TODO make a prettier toString
+        TextArea program = new TextArea(this.controller.getProgramStates().get(0).getOriginalProgram().toPrettyString());
         program.setEditable(false);
         program.setWrapText(true);
         program.setPrefWidth(300);
@@ -156,7 +157,7 @@ public class ExecutionWindow {
                         .findFirst()
                         .orElse(null);
 
-                this.refresh();
+                this.loadCurrentProgramState();
             }
         });
 
@@ -288,8 +289,7 @@ public class ExecutionWindow {
 
         this.loadProgramStates();
 
-        this.loadSymbolsTable();
-        this.loadExecutionStack();
+        this.loadCurrentProgramState();
     }
 
     private void loadHeapTable() {
@@ -326,6 +326,11 @@ public class ExecutionWindow {
                 this.programStatesID.getSelectionModel().selectLast();
             }
         });
+    }
+
+    private void loadCurrentProgramState() {
+        this.loadSymbolsTable();
+        this.loadExecutionStack();
     }
 
     private void loadSymbolsTable() {

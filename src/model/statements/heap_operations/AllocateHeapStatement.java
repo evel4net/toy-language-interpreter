@@ -57,4 +57,9 @@ public class AllocateHeapStatement implements Statement {
     public String toString() {
         return "new(" + this.variableName + ", " + this.expression.toString() + ")";
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.toString() + ";";
+    }
 }

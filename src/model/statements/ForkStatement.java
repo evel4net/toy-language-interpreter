@@ -6,6 +6,9 @@ import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
 import model.types.Type;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class ForkStatement implements Statement {
     private final Statement statement;
 
@@ -37,5 +40,13 @@ public class ForkStatement implements Statement {
     @Override
     public String toString() {
         return "Fork(" + this.statement.toString() + ")";
+    }
+
+    @Override
+    public String toPrettyString() {
+        String statementString = Arrays.stream(this.statement.toPrettyString().split("\n"))
+                .map(str -> { return "\t" + str;})
+                .collect(Collectors.joining("\n"));
+        return "Fork(\n" + statementString + "\n);";
     }
 }

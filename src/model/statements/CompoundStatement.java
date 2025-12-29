@@ -39,4 +39,9 @@ public class CompoundStatement implements Statement {
     public String toString() {
         return "(" + this.firstStatement.toString() +  ";" + this.secondStatement.toString() + ")";
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.firstStatement.toPrettyString() + "\n" + this.secondStatement.toPrettyString() + "\n";
+    }
 }

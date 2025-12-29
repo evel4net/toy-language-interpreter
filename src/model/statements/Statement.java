@@ -10,4 +10,5 @@ public interface Statement {
     IADTDictionary<String, Type> typeCheck(IADTDictionary<String, Type> typeEnvironment) throws ProgramException;
     Statement deepCopy();
     String toString();
+    String toPrettyString();
 }

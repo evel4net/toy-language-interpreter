@@ -37,4 +37,9 @@ public class PrintStatement implements Statement {
     public String toString() {
         return "Print(" + this.expression.toString() + ")";
     }
+
+    @Override
+    public String toPrettyString() {
+        return this.toString() + ";";
+    }
 }
