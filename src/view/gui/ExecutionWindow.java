@@ -31,9 +31,19 @@ public class ExecutionWindow {
     private final TableColumn<Pair<Integer, String>, String> heapTableView_valueColumn = new TableColumn<>("Value");
 
     @FXML
+    private final TableView<Object[]> barrierTableVIew = new TableView<>();
+    @FXML
+    private final TableColumn<Object[], Object> barrierTableVIew_indexColumn = new TableColumn<>("Index");
+    @FXML
+    private final TableColumn<Object[], Object> barrierTableVIew_numberThreadsColumn = new TableColumn<>("Value");
+    @FXML
+    private final TableColumn<Object[], Object> barrierTableVIew_threadsColumn = new TableColumn<>("Threads");
+
+    @FXML
     private final ListView<String> outputListView = new ListView<>();
     @FXML
     private final ListView<String> fileTableListView = new ListView<>();
+
 
     @FXML
     private final TextField programStatesCount = new TextField("0");
@@ -126,6 +136,20 @@ public class ExecutionWindow {
 
         grid.add(fileTableText, 2, 1);
         grid.add(this.fileTableListView, 2, 2);
+
+        // BARRIER TABLE
+        Text barrierTableText = new Text("Barriers Table");
+
+        this.barrierTableVIew_indexColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue()[0]));
+        this.barrierTableVIew_numberThreadsColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue()[1]));
+        this.barrierTableVIew_threadsColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue()[2]));
+        this.barrierTableVIew.getColumns().addAll(this.barrierTableVIew_indexColumn, this.barrierTableVIew_numberThreadsColumn, this.barrierTableVIew_threadsColumn);
+        this.barrierTableVIew.setEditable(false);
+        this.barrierTableVIew.getSelectionModel().setCellSelectionEnabled(false);
+        this.barrierTableVIew.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+
+        grid.add(barrierTableText, 3, 1);
+        grid.add(this.barrierTableVIew, 3, 2);
 
         // PROGRAM STATES COUNT
         Text programStatesCountText = new Text("Program States Counter");
@@ -297,6 +321,7 @@ public class ExecutionWindow {
         this.loadHeapTable();
         this.loadOutput();
         this.loadFileTable();
+        this.loadBarrierTable();
 
         this.loadProgramStates();
 
@@ -322,6 +347,13 @@ public class ExecutionWindow {
 
         this.fileTableListView.getItems().clear();
         fileTable.getContent().forEach(file -> this.fileTableListView.getItems().add(file.toString()));
+    }
+
+    private void loadBarrierTable() {
+        BarrierTable barrierTable = this.currentProgramState.getBarrierTable();
+
+        this.barrierTableVIew.getItems().clear();
+        barrierTable.getContent().forEach((index, barrier) -> this.barrierTableVIew.getItems().add(new Object[]{index, barrier.getKey(), barrier.getValue().toString()}));
     }
 
     private void loadProgramStates() {

@@ -24,6 +24,7 @@ public class ForkStatement implements Statement {
                 state.getOutput(),
                 state.getFileTable(),
                 state.getHeapTable(),
+                state.getBarrierTable(),
                 this.statement);
     }
 

@@ -6,6 +6,8 @@ import model.adt.dictionary.ADTDictionary;
 import model.expressions.*;
 import model.program_state.*;
 import model.statements.*;
+import model.statements.cyclic_barrier_operations.AwaitBarrierStatement;
+import model.statements.cyclic_barrier_operations.NewBarrierStatement;
 import model.statements.file_operations.CloseReadFileStatement;
 import model.statements.file_operations.OpenReadFileStatement;
 import model.statements.file_operations.ReadFileStatement;
@@ -378,13 +380,68 @@ public class ExamplesLoader {
         );
         this.addExample(example13);
 
+        // Example 14: cyclic barrier
 
+        Statement example14 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v1"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new ReferenceType(new IntType()), "v2"),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v3"),
+                                new CompoundStatement(
+                                        new VariableDeclarationStatement(new IntType(), "cnt"),
+                                        new CompoundStatement(
+                                                new AllocateHeapStatement("v1", new ValueExpression(new IntValue(2))),
+                                                new CompoundStatement(
+                                                        new AllocateHeapStatement("v2", new ValueExpression(new IntValue(3))),
+                                                        new CompoundStatement(
+                                                                new AllocateHeapStatement("v3", new ValueExpression(new IntValue(4))),
+                                                                new CompoundStatement(
+                                                                        new NewBarrierStatement("cnt", new ReadHeapExpression(new VariableExpression("v2"))),
+                                                                        new CompoundStatement(
+                                                                                new ForkStatement(
+                                                                                        new CompoundStatement(
+                                                                                                new AwaitBarrierStatement("cnt"),
+                                                                                                new CompoundStatement(
+                                                                                                        new WriteHeapStatement("v1", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), '*')),
+                                                                                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("v1")))
+                                                                                                )
+                                                                                        )
+                                                                                ),
+                                                                                new CompoundStatement(
+                                                                                        new ForkStatement(
+                                                                                                new CompoundStatement(
+                                                                                                        new AwaitBarrierStatement("cnt"),
+                                                                                                        new CompoundStatement(
+                                                                                                                new WriteHeapStatement("v2", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(10)), '*')),
+                                                                                                                new CompoundStatement(
+                                                                                                                        new WriteHeapStatement("v2", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(10)), '*')),
+                                                                                                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("v2")))
+                                                                                                                )
+                                                                                                        )
+                                                                                                )
+                                                                                        ),
+                                                                                        new CompoundStatement(
+                                                                                                new AwaitBarrierStatement("cnt"),
+                                                                                                new PrintStatement(new ReadHeapExpression(new VariableExpression("v3")))
+                                                                                        )
+                                                                                )
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example14);
     }
 
     private void addExample(Statement example) {
         example.typeCheck(new ADTDictionary<>());
 
-        ProgramState state = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example);
+        ProgramState state = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), new BarrierTable(), example);
         IRepository repository = new Repository(state, "logFile_" + Integer.toString(this.examples.size() + 1) + ".txt");
         IController controller = new Controller(repository, false);
 
