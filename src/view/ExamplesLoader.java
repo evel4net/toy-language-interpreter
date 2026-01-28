@@ -337,7 +337,7 @@ public class ExamplesLoader {
         );
         this.addExample(example12);
 
-        // Example 13
+        // Example 13: Repeat Until
         Statement example13 = new CompoundStatement(
                 new VariableDeclarationStatement(new IntType(), "v"),
                 new CompoundStatement(
@@ -378,7 +378,45 @@ public class ExamplesLoader {
         );
         this.addExample(example13);
 
-
+        // Example 14: Conditional Assignment
+        Statement example14 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "a"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new ReferenceType(new IntType()), "b"),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new IntType(), "v"),
+                                new CompoundStatement(
+                                        new AllocateHeapStatement("a", new ValueExpression(new IntValue(0))),
+                                        new CompoundStatement(
+                                                new AllocateHeapStatement("b", new ValueExpression(new IntValue(0))),
+                                                new CompoundStatement(
+                                                        new WriteHeapStatement("a", new ValueExpression(new IntValue(1))),
+                                                        new CompoundStatement(
+                                                                new WriteHeapStatement("b", new ValueExpression(new IntValue(2))),
+                                                                new CompoundStatement(
+                                                                        new ConditionalAssignmentStatement("v",
+                                                                                new RelationalExpression(new ReadHeapExpression(new VariableExpression("a")), new ReadHeapExpression(new VariableExpression("b")), "<"),
+                                                                                new ValueExpression(new IntValue(100)),
+                                                                                new ValueExpression(new IntValue(200))),
+                                                                        new CompoundStatement(
+                                                                                new PrintStatement(new VariableExpression("v")),
+                                                                                new CompoundStatement(
+                                                                                        new ConditionalAssignmentStatement("v",
+                                                                                                new RelationalExpression(new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("b")), new ValueExpression(new IntValue(2)), '-'), new ReadHeapExpression(new VariableExpression("a")), ">"),
+                                                                                                new ValueExpression(new IntValue(100)),
+                                                                                                new ValueExpression(new IntValue(200))),
+                                                                                        new PrintStatement(new VariableExpression("v"))
+                                                                                )
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example14);
     }
 
     private void addExample(Statement example) {
