@@ -31,6 +31,13 @@ public class ExecutionWindow {
     private final TableColumn<Pair<Integer, String>, String> heapTableView_valueColumn = new TableColumn<>("Value");
 
     @FXML
+    private final TableView<Pair<Integer, Integer>> latchTableView = new TableView<>();
+    @FXML
+    private final TableColumn<Pair<Integer, Integer>, Integer> latchTableView_addressColumn = new TableColumn<>("Address");
+    @FXML
+    private final TableColumn<Pair<Integer, Integer>, String> latchTableView_valueColumn = new TableColumn<>("Value");
+
+    @FXML
     private final ListView<String> outputListView = new ListView<>();
     @FXML
     private final ListView<String> fileTableListView = new ListView<>();
@@ -126,6 +133,19 @@ public class ExecutionWindow {
 
         grid.add(fileTableText, 2, 1);
         grid.add(this.fileTableListView, 2, 2);
+
+        // LATCH TABLE
+        Text latchTableText = new Text("Latch Table");
+
+        this.latchTableView_addressColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getKey()));
+        this.latchTableView_valueColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue().getValue()));
+        this.latchTableView.getColumns().addAll(this.latchTableView_addressColumn, this.latchTableView_valueColumn);
+        this.latchTableView.setEditable(false);
+        this.latchTableView.getSelectionModel().setCellSelectionEnabled(false);
+        this.latchTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+
+        grid.add(latchTableText, 3, 1);
+        grid.add(this.latchTableView, 3, 2);
 
         // PROGRAM STATES COUNT
         Text programStatesCountText = new Text("Program States Counter");
@@ -297,6 +317,7 @@ public class ExecutionWindow {
         this.loadHeapTable();
         this.loadOutput();
         this.loadFileTable();
+        this.loadLatchTable();
 
         this.loadProgramStates();
 
@@ -308,6 +329,13 @@ public class ExecutionWindow {
 
         this.heapTableView.getItems().clear();
         heapTable.getContent().forEach((address, value) -> this.heapTableView.getItems().add(new Pair<>(address, value.toString())));
+    }
+
+    private void loadLatchTable() {
+        LatchTable latchTable = this.currentProgramState.getLatchTable();
+
+        this.latchTableView.getItems().clear();
+        latchTable.getContent().forEach((address, value) -> this.latchTableView.getItems().add(new Pair<>(address, value)));
     }
 
     private void loadOutput() {

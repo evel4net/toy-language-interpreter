@@ -11,6 +11,9 @@ import model.statements.file_operations.OpenReadFileStatement;
 import model.statements.file_operations.ReadFileStatement;
 import model.statements.heap_operations.AllocateHeapStatement;
 import model.statements.heap_operations.WriteHeapStatement;
+import model.statements.latch_operations.AwaitLatchStatement;
+import model.statements.latch_operations.CountDownLatchStatement;
+import model.statements.latch_operations.NewLatchStatement;
 import model.types.BoolType;
 import model.types.IntType;
 import model.types.ReferenceType;
@@ -337,30 +340,81 @@ public class ExamplesLoader {
         );
         this.addExample(example12);
 
-        // Example 13 : bool a; a = true; (If a Then v = 2 Else v = 3); Print(v)
-        // -- fails because v was not declared
-//        Statement example13 = new CompoundStatement(
-//                new VariableDeclarationStatement(new BoolType(), "a"),
-//                new CompoundStatement(
-//                        new AssignmentStatement("a", new ValueExpression(new BoolValue(true))),
-//                        new CompoundStatement(
-//                                new IfStatement(
-//                                        new VariableExpression("a"),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(3)))
-//                                ),
-//                                new PrintStatement(new VariableExpression("v"))
-//                        )
-//                )
-//
-//        );
-//        this.addExample(example13);
+        // Example13: Count Down Latch
+        Statement example13 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v1"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new ReferenceType(new IntType()), "v2"),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v3"),
+                                new CompoundStatement(
+                                        new VariableDeclarationStatement(new IntType(), "cnt"),
+                                        new CompoundStatement(
+                                                new AllocateHeapStatement("v1", new ValueExpression(new IntValue(2))),
+                                                new CompoundStatement(
+                                                        new AllocateHeapStatement("v2", new ValueExpression(new IntValue(3))),
+                                                        new CompoundStatement(
+                                                                new AllocateHeapStatement("v3", new ValueExpression(new IntValue(4))),
+                                                                new CompoundStatement(
+                                                                        new NewLatchStatement("cnt", new ReadHeapExpression(new VariableExpression("v2"))),
+                                                                        new CompoundStatement(
+                                                                                new ForkStatement(
+                                                                                        new CompoundStatement(
+                                                                                                new WriteHeapStatement("v1", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), '*')),
+                                                                                                new CompoundStatement(
+                                                                                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))),
+                                                                                                        new CompoundStatement(
+                                                                                                                new CountDownLatchStatement("cnt"),
+                                                                                                                new ForkStatement(
+                                                                                                                        new CompoundStatement(
+                                                                                                                                new WriteHeapStatement("v2", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v2")), new ValueExpression(new IntValue(10)), '*')),
+                                                                                                                                new CompoundStatement(
+                                                                                                                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("v2"))),
+                                                                                                                                        new CompoundStatement(
+                                                                                                                                                new CountDownLatchStatement("cnt"),
+                                                                                                                                                new ForkStatement(
+                                                                                                                                                        new CompoundStatement(
+                                                                                                                                                                new WriteHeapStatement("v3", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v3")), new ValueExpression(new IntValue(10)), '*')),
+                                                                                                                                                                new CompoundStatement(
+                                                                                                                                                                        new PrintStatement(new ReadHeapExpression(new VariableExpression("v3"))),
+                                                                                                                                                                        new CountDownLatchStatement("cnt")
+                                                                                                                                                                )
+                                                                                                                                                        )
+                                                                                                                                                )
+                                                                                                                                        )
+                                                                                                                                )
+                                                                                                                        )
+                                                                                                                )
+                                                                                                        )
+                                                                                                )
+                                                                                        )
+                                                                                ),
+                                                                                new CompoundStatement(
+                                                                                        new AwaitLatchStatement("cnt"),
+                                                                                        new CompoundStatement(
+                                                                                                new PrintStatement(new ValueExpression(new IntValue(100))),
+                                                                                                new CompoundStatement(
+                                                                                                        new CountDownLatchStatement("cnt"),
+                                                                                                        new PrintStatement(new ValueExpression(new IntValue(100)))
+                                                                                                )
+                                                                                        )
+                                                                                )
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example13);
     }
 
     private void addExample(Statement example) {
         example.typeCheck(new ADTDictionary<>());
 
-        ProgramState state = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example);
+        ProgramState state = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), new LatchTable(), example);
         IRepository repository = new Repository(state, "logFile_" + Integer.toString(this.examples.size() + 1) + ".txt");
         IController controller = new Controller(repository, false);
 
