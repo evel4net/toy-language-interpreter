@@ -337,24 +337,48 @@ public class ExamplesLoader {
         );
         this.addExample(example12);
 
-        // Example 13 : bool a; a = true; (If a Then v = 2 Else v = 3); Print(v)
-        // -- fails because v was not declared
-//        Statement example13 = new CompoundStatement(
-//                new VariableDeclarationStatement(new BoolType(), "a"),
-//                new CompoundStatement(
-//                        new AssignmentStatement("a", new ValueExpression(new BoolValue(true))),
-//                        new CompoundStatement(
-//                                new IfStatement(
-//                                        new VariableExpression("a"),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(3)))
-//                                ),
-//                                new PrintStatement(new VariableExpression("v"))
-//                        )
-//                )
-//
-//        );
-//        this.addExample(example13);
+        // Example 13
+        Statement example13 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new IntType(), "x"),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new IntType(), "y"),
+                                new CompoundStatement(
+                                        new AssignmentStatement("v", new ValueExpression(new IntValue(0))),
+                                        new CompoundStatement(
+                                                new RepeatUntilStatement(
+                                                        new CompoundStatement(
+                                                                new ForkStatement(new CompoundStatement(
+                                                                        new PrintStatement(new VariableExpression("v")),
+                                                                        new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), '-'))
+                                                                )),
+                                                                new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), '+'))
+                                                        ),
+                                                        new RelationalExpression(new VariableExpression("v"), new ValueExpression(new IntValue(3)), "==")
+                                                ),
+                                                new CompoundStatement(
+                                                        new AssignmentStatement("x", new ValueExpression(new IntValue(1))),
+                                                        new CompoundStatement(
+                                                                new NoOperationStatement(),
+                                                                new CompoundStatement(
+                                                                        new AssignmentStatement("y", new ValueExpression(new IntValue(3))),
+                                                                        new CompoundStatement(
+                                                                                new NoOperationStatement(),
+                                                                                new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), '*'))
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example13);
+
+
     }
 
     private void addExample(Statement example) {

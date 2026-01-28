@@ -61,6 +61,16 @@ public class LogicExpression implements Expression {
         return new LogicExpression(this.expressionLeft.deepCopy(), this.expressionRight.deepCopy(), this.operator);
     }
 
+    public Expression not() {
+        String notOperator = switch (this.operator.toLowerCase(Locale.ROOT)) {
+            case "and" -> "or";
+            case "or" -> "and";
+            default -> throw new IncorrectOperatorException(this.operator);
+        };
+
+        return new LogicExpression(this.expressionLeft.deepCopy(), this.expressionRight.deepCopy(), notOperator);
+    }
+
     @Override
     public  String toString() {
         return this.expressionLeft + this.operator + this.expressionRight;

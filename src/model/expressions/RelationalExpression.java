@@ -63,6 +63,20 @@ public class RelationalExpression implements Expression {
         return new RelationalExpression(this.expressionLeft.deepCopy(), this.expressionRight.deepCopy(), this.operator);
     }
 
+    public Expression not() {
+        String notOperator = switch (this.operator) {
+            case "<" -> ">=";
+            case "<=" -> ">";
+            case "==" -> "!=";
+            case "!=" -> "==";
+            case ">" -> "<=";
+            case ">=" -> "<";
+            default -> throw new IncorrectOperatorException(this.operator);
+        };
+
+        return new RelationalExpression(this.expressionLeft.deepCopy(), this.expressionRight.deepCopy(), notOperator);
+    }
+
     @Override
     public String toString() {
         return this.expressionLeft.toString() + this.operator + this.expressionRight.toString();
