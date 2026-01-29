@@ -417,6 +417,43 @@ public class ExamplesLoader {
                 )
         );
         this.addExample(example14);
+
+        // Example 15: For statement
+//        Statement example15 = new CompoundStatement(
+//                new VariableDeclarationStatement(new ReferenceType(new IntType()), "a"),
+//                new CompoundStatement(
+//                        new AllocateHeapStatement("a", new ValueExpression(new IntValue(20))),
+//                        new CompoundStatement(
+//                                new ForStatement("v", new ValueExpression(new IntValue(0)), new ValueExpression(new IntValue(3)), new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), '+'),
+//                                        new ForkStatement(new CompoundStatement(
+//                                                new PrintStatement(new VariableExpression("v")),
+//                                                new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ReadHeapExpression(new VariableExpression("a")), '*'))
+//                                        ))
+//                                ),
+//                                new PrintStatement(new ReadHeapExpression(new VariableExpression("a")))
+//                        )
+//                )
+//        );
+
+        Statement example15 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "a"),
+                new CompoundStatement(
+                        new AllocateHeapStatement("a", new ValueExpression(new IntValue(20))),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new IntType(), "v"),
+                                new CompoundStatement(
+                                    new ForStatement("v", new ValueExpression(new IntValue(0)), new ValueExpression(new IntValue(3)), new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), '+'),
+                                            new ForkStatement(new CompoundStatement(
+                                                    new PrintStatement(new VariableExpression("v")),
+                                                    new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ReadHeapExpression(new VariableExpression("a")), '*'))
+                                            ))
+                                    ),
+                                    new PrintStatement(new ReadHeapExpression(new VariableExpression("a")))
+                                )
+                        )
+                )
+        );
+        this.addExample(example15);
     }
 
     private void addExample(Statement example) {
