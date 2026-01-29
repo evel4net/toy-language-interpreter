@@ -31,6 +31,13 @@ public class ExecutionWindow {
     private final TableColumn<Pair<Integer, String>, String> heapTableView_valueColumn = new TableColumn<>("Value");
 
     @FXML
+    private final TableView<Pair<Integer, Integer>> lockTableView = new TableView<>();
+    @FXML
+    private final TableColumn<Pair<Integer, Integer>, Integer> lockTableView_addressColumn = new TableColumn<>("Index");
+    @FXML
+    private final TableColumn<Pair<Integer, Integer>, Integer> lockTableView_valueColumn = new TableColumn<>("State ID");
+
+    @FXML
     private final ListView<String> outputListView = new ListView<>();
     @FXML
     private final ListView<String> fileTableListView = new ListView<>();
@@ -126,6 +133,19 @@ public class ExecutionWindow {
 
         grid.add(fileTableText, 2, 1);
         grid.add(this.fileTableListView, 2, 2);
+
+        // LOCK TABLE
+        Text lockTableText = new Text("Heap Table");
+
+        this.lockTableView_addressColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getKey()));
+        this.lockTableView_valueColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue().getValue()));
+        this.lockTableView.getColumns().addAll(this.lockTableView_addressColumn, this.lockTableView_valueColumn);
+        this.lockTableView.setEditable(false);
+        this.lockTableView.getSelectionModel().setCellSelectionEnabled(false);
+        this.lockTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+
+        grid.add(lockTableText, 3, 1);
+        grid.add(this.lockTableView, 3, 2);
 
         // PROGRAM STATES COUNT
         Text programStatesCountText = new Text("Program States Counter");
@@ -297,6 +317,7 @@ public class ExecutionWindow {
         this.loadHeapTable();
         this.loadOutput();
         this.loadFileTable();
+        this.loadLockTable();
 
         this.loadProgramStates();
 
@@ -308,6 +329,13 @@ public class ExecutionWindow {
 
         this.heapTableView.getItems().clear();
         heapTable.getContent().forEach((address, value) -> this.heapTableView.getItems().add(new Pair<>(address, value.toString())));
+    }
+
+    private void loadLockTable() {
+        LockTable lockTable = this.currentProgramState.getLockTable();
+
+        this.lockTableView.getItems().clear();
+        lockTable.getContent().forEach((address, value) -> this.lockTableView.getItems().add(new Pair<>(address, value)));
     }
 
     private void loadOutput() {

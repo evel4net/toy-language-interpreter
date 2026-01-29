@@ -12,6 +12,7 @@ public class ProgramState {
     private Output output;
     private FileTable fileTable;
     private HeapTable heapTable;
+    private LockTable lockTable;
     private final Statement originalProgram;
 
     public ProgramState(ExecutionStack executionStack,
@@ -19,6 +20,7 @@ public class ProgramState {
                         Output output,
                         FileTable fileTable,
                         HeapTable heapTable,
+                        LockTable lockTable,
                         Statement program) {
         this.id = ProgramState.getNextId();
 
@@ -27,6 +29,7 @@ public class ProgramState {
         this.output = output;
         this.fileTable = fileTable;
         this.heapTable = heapTable;
+        this.lockTable = lockTable;
 
         this.originalProgram = program.deepCopy();
 
@@ -60,6 +63,10 @@ public class ProgramState {
         return heapTable;
     }
 
+    public LockTable getLockTable() {
+        return lockTable;
+    }
+
     public Statement getOriginalProgram() {
         return this.originalProgram;
     }
@@ -70,6 +77,7 @@ public class ProgramState {
         this.symbolsTable = new SymbolsTable();
         this.fileTable = new FileTable();
         this.heapTable = new HeapTable();
+        this.lockTable = new LockTable();
 
         Statement program = this.originalProgram.deepCopy();
 
@@ -94,6 +102,7 @@ public class ProgramState {
                 ", symbolsTable=" + this.symbolsTable.toString() +
                 ", fileTable=" + this.fileTable.toString() +
                 ", heapTable=" + this.heapTable.toString() +
+                ", lockTable=" + this.lockTable.toString() +
                 ", output=" + this.output.toString() +
                 '}';
     }
