@@ -454,6 +454,44 @@ public class ExamplesLoader {
                 )
         );
         this.addExample(example15);
+
+        // Example 16: Switch Case
+        Statement example16 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "a"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new IntType(), "b"),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new IntType(), "c"),
+                                new CompoundStatement(
+                                        new AssignmentStatement("a", new ValueExpression(new IntValue(1))),
+                                        new CompoundStatement(
+                                                new AssignmentStatement("b", new ValueExpression(new IntValue(2))),
+                                                new CompoundStatement(
+                                                        new AssignmentStatement("c", new ValueExpression(new IntValue(5))),
+                                                        new CompoundStatement(
+                                                                new SwitchStatement(
+                                                                        new ArithmeticExpression(new VariableExpression("a"), new ValueExpression(new IntValue(10)), '*'),
+                                                                        new ArithmeticExpression(new VariableExpression("b"), new VariableExpression("c"), '*'),
+                                                                        new CompoundStatement(
+                                                                                new PrintStatement(new VariableExpression("a")),
+                                                                                new PrintStatement(new VariableExpression("b"))
+                                                                        ),
+                                                                        new ValueExpression(new IntValue(10)),
+                                                                        new CompoundStatement(
+                                                                                new PrintStatement(new ValueExpression(new IntValue(100))),
+                                                                                new PrintStatement(new ValueExpression(new IntValue(200)))
+                                                                        ),
+                                                                        new PrintStatement(new ValueExpression(new IntValue(300)))
+                                                                ),
+                                                                new PrintStatement(new ValueExpression(new IntValue(300)))
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example16);
     }
 
     private void addExample(Statement example) {
