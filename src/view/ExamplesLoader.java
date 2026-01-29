@@ -380,7 +380,19 @@ public class ExamplesLoader {
         );
         this.addExample(example13);
 
-        // Example 14: cyclic barrier
+        // Example 14: Cyclic Barrier
+        /*
+        Ref int v1; Ref int v2; Ref int v3; int cnt;
+        new(v1, 2); new(v2, 3); new(v3, 4); newBarrier(cnt, rh(v2));
+        fork(
+            await(cnt); wh(v1, rh(v1)*10); print(rh(v1));
+        );
+        fork(
+            await(cnt); wh(v2, rh(v2)*10); wh(v2, rh(v2)*10); print(rh(v2));
+        );
+        await(cnt); print(rh(v3));
+        => Out = {4, 20, 300}
+         */
 
         Statement example14 = new CompoundStatement(
                 new VariableDeclarationStatement(new ReferenceType(new IntType()), "v1"),
