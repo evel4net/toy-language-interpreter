@@ -337,24 +337,25 @@ public class ExamplesLoader {
         );
         this.addExample(example12);
 
-        // Example 13 : bool a; a = true; (If a Then v = 2 Else v = 3); Print(v)
-        // -- fails because v was not declared
-//        Statement example13 = new CompoundStatement(
-//                new VariableDeclarationStatement(new BoolType(), "a"),
-//                new CompoundStatement(
-//                        new AssignmentStatement("a", new ValueExpression(new BoolValue(true))),
-//                        new CompoundStatement(
-//                                new IfStatement(
-//                                        new VariableExpression("a"),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(3)))
-//                                ),
-//                                new PrintStatement(new VariableExpression("v"))
-//                        )
-//                )
-//
-//        );
-//        this.addExample(example13);
+        // Example 13 : MUL Expression
+        Statement example13 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v1"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new IntType(), "v2"),
+                        new CompoundStatement(
+                                new AssignmentStatement("v1", new ValueExpression(new IntValue(2))),
+                                new CompoundStatement(
+                                        new AssignmentStatement("v2", new ValueExpression(new IntValue(3))),
+                                        new IfStatement(
+                                                new RelationalExpression(new VariableExpression("v1"), new ValueExpression(new IntValue(2)), ">="),
+                                                new PrintStatement(new RelationalMULExpression(new VariableExpression("v1"), new VariableExpression("v2"))),
+                                                new PrintStatement(new VariableExpression("v1"))
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example13);
     }
 
     private void addExample(Statement example) {
