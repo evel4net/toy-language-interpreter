@@ -135,7 +135,7 @@ public class ExecutionWindow {
         grid.add(this.fileTableListView, 2, 2);
 
         // LOCK TABLE
-        Text lockTableText = new Text("Heap Table");
+        Text lockTableText = new Text("Locks Table");
 
         this.lockTableView_addressColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getKey()));
         this.lockTableView_valueColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue().getValue()));
