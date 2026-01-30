@@ -8,7 +8,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LatchTable {
+public class LatchTable implements ILatchTable {
     private Map<Integer, Integer> latchTable = new ConcurrentHashMap<>();
     private int newFreeAddress = 1;
 
