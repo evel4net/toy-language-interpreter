@@ -137,7 +137,7 @@ public class ExecutionWindow {
         grid.add(this.fileTableListView, 2, 2);
 
         // SEMAPHORE TABLE
-        Text semaphoreTableText = new Text("Heap Table");
+        Text semaphoreTableText = new Text("Semaphores Table");
 
         this.semaphoreTableView_addressColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue()[0]));
         this.semaphoreTableView_valueColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue()[1]));
