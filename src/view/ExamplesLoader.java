@@ -505,6 +505,30 @@ public class ExamplesLoader {
                 )
         );
         this.addExample(example17);
+
+        // Example 18: Sleep Statement
+        Statement example18 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v"),
+                new CompoundStatement(
+                        new AssignmentStatement("v", new ValueExpression(new IntValue(10))),
+                        new CompoundStatement(
+                                new ForkStatement(
+                                        new CompoundStatement(
+                                                new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), '-')),
+                                                new CompoundStatement(
+                                                        new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(1)), '-')),
+                                                        new PrintStatement(new VariableExpression("v"))
+                                                )
+                                        )
+                                ),
+                                new CompoundStatement(
+                                        new SleepStatement(10),
+                                        new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), '*'))
+                                )
+                        )
+                )
+        );
+        this.addExample(example18);
     }
 
     private void addExample(Statement example) {
