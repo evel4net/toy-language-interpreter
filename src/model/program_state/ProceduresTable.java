@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ProceduresTable {
+public class ProceduresTable implements IProceduresTable {
     private Map<String, Pair<ArrayList<String>, Statement>> proceduresTable = new ConcurrentHashMap<>();
 
     public synchronized void addNewProcedure(String name, ArrayList<String> formalParameters, Statement body) throws KeyAlreadyExistsException {
