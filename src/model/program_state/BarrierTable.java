@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BarrierTable {
+public class BarrierTable implements IBarrierTable {
     private Map<Integer, Pair<Integer, ArrayList<Integer>>> barrierTable = new ConcurrentHashMap<>();
     private int newIndex = 1;
 
