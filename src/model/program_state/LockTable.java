@@ -6,7 +6,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LockTable {
+public class LockTable implements ILockTable {
     private Map<Integer, Integer> lockTable = new ConcurrentHashMap<>();
     private int newFreeAddress = 1;
 
