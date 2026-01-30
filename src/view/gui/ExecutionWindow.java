@@ -8,10 +8,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -29,6 +26,14 @@ public class ExecutionWindow {
     private final TableColumn<Pair<Integer, String>, Integer> heapTableView_addressColumn = new TableColumn<>("Address");
     @FXML
     private final TableColumn<Pair<Integer, String>, String> heapTableView_valueColumn = new TableColumn<>("Value");
+
+    @FXML
+    private final TableView<Pair<String, String>> proceduresTableView = new TableView<>();
+    @FXML
+    private final TableColumn<Pair<String, String>, String> proceduresTableView_addressColumn = new TableColumn<>("Name");
+    @FXML
+    private final TableColumn<Pair<String, String>, String> proceduresTableView_valueColumn = new TableColumn<>("Parameters");
+
 
     @FXML
     private final ListView<String> outputListView = new ListView<>();
@@ -126,6 +131,20 @@ public class ExecutionWindow {
 
         grid.add(fileTableText, 2, 1);
         grid.add(this.fileTableListView, 2, 2);
+
+        // PROCEDURES TABLE
+        Text proceduresTableText = new Text("Procedures Table");
+
+        this.proceduresTableView_addressColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getKey()));
+        this.proceduresTableView_valueColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getValue()));
+        this.proceduresTableView.getColumns().addAll(this.proceduresTableView_addressColumn, this.proceduresTableView_valueColumn);
+        this.proceduresTableView.setEditable(false);
+        this.proceduresTableView.getSelectionModel().setCellSelectionEnabled(false);
+        this.proceduresTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        this.proceduresTableView_valueColumn.setMinWidth(150);
+
+        grid.add(proceduresTableText, 3, 1);
+        grid.add(this.proceduresTableView, 3, 2);
 
         // PROGRAM STATES COUNT
         Text programStatesCountText = new Text("Program States Counter");
@@ -297,6 +316,7 @@ public class ExecutionWindow {
         this.loadHeapTable();
         this.loadOutput();
         this.loadFileTable();
+        this.loadProceduresTable();
 
         this.loadProgramStates();
 
@@ -308,6 +328,13 @@ public class ExecutionWindow {
 
         this.heapTableView.getItems().clear();
         heapTable.getContent().forEach((address, value) -> this.heapTableView.getItems().add(new Pair<>(address, value.toString())));
+    }
+
+    private void loadProceduresTable() {
+        ProceduresTable proceduresTable = this.currentProgramState.getProceduresTable();
+
+        this.proceduresTableView.getItems().clear();
+        proceduresTable.getContent().forEach((name, pair) -> this.proceduresTableView.getItems().add(new Pair<>(name + pair.getKey().toString(), pair.getValue().toString())));
     }
 
     private void loadOutput() {
