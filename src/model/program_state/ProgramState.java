@@ -3,30 +3,35 @@ package model.program_state;
 import model.adt.stack.EmptyStackException;
 import model.statements.Statement;
 
+import java.util.Stack;
+
 public class ProgramState {
     private static int availableId = 0;
 
     private final int id;
     private ExecutionStack executionStack;
-    private SymbolsTable symbolsTable;
+    private Stack<SymbolsTable> symbolsTables;
     private Output output;
     private FileTable fileTable;
     private HeapTable heapTable;
+    private ProceduresTable proceduresTable;
     private final Statement originalProgram;
 
     public ProgramState(ExecutionStack executionStack,
-                        SymbolsTable symbolsTable,
+                        Stack<SymbolsTable> symbolsTables,
                         Output output,
                         FileTable fileTable,
                         HeapTable heapTable,
+                        ProceduresTable proceduresTable,
                         Statement program) {
         this.id = ProgramState.getNextId();
 
         this.executionStack = executionStack;
-        this.symbolsTable = symbolsTable;
+        this.symbolsTables = symbolsTables;
         this.output = output;
         this.fileTable = fileTable;
         this.heapTable = heapTable;
+        this.proceduresTable = proceduresTable;
 
         this.originalProgram = program.deepCopy();
 
@@ -38,6 +43,10 @@ public class ProgramState {
         return ProgramState.availableId;
     }
 
+    public void addSymbolsTable(SymbolsTable newSymbolsTable) { this.symbolsTables.push(newSymbolsTable); }
+
+    public SymbolsTable popSymbolsTable() { return this.symbolsTables.pop(); }
+
     public int getId() { return this.id; }
 
     public ExecutionStack getExecutionStack() {
@@ -45,8 +54,10 @@ public class ProgramState {
     }
 
     public SymbolsTable getSymbolsTable() {
-        return this.symbolsTable;
+        return this.symbolsTables.peek();
     }
+
+    public Stack<SymbolsTable> getAllSymbolsTables() { return symbolsTables; }
 
     public Output getOutput() {
         return this.output;
@@ -60,6 +71,10 @@ public class ProgramState {
         return heapTable;
     }
 
+    public ProceduresTable getProceduresTable() {
+        return proceduresTable;
+    }
+
     public Statement getOriginalProgram() {
         return this.originalProgram;
     }
@@ -67,9 +82,14 @@ public class ProgramState {
     public void resetToOriginalProgram() {
         this.executionStack = new ExecutionStack();
         this.output = new Output();
-        this.symbolsTable = new SymbolsTable();
+
+        Stack<SymbolsTable> stack = new Stack<>();
+        stack.push(new SymbolsTable());
+        this.symbolsTables = stack;
+
         this.fileTable = new FileTable();
         this.heapTable = new HeapTable();
+//        this.proceduresTable = new ProceduresTable();
 
         Statement program = this.originalProgram.deepCopy();
 
@@ -91,9 +111,10 @@ public class ProgramState {
     public String toString() {
         return Integer.toString(this.id) +  ": ProgramState{" +
                 "executionStack=" + this.executionStack.toString() +
-                ", symbolsTable=" + this.symbolsTable.toString() +
+                ", symbolsTables=" + this.symbolsTables.toString() +
                 ", fileTable=" + this.fileTable.toString() +
                 ", heapTable=" + this.heapTable.toString() +
+                ", proceduresTable=" + this.proceduresTable.toString() +
                 ", output=" + this.output.toString() +
                 '}';
     }

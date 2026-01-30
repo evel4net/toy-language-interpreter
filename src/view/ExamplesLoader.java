@@ -11,6 +11,7 @@ import model.statements.file_operations.OpenReadFileStatement;
 import model.statements.file_operations.ReadFileStatement;
 import model.statements.heap_operations.AllocateHeapStatement;
 import model.statements.heap_operations.WriteHeapStatement;
+import model.statements.procedure_operations.CallProcedureStatement;
 import model.types.BoolType;
 import model.types.IntType;
 import model.types.ReferenceType;
@@ -23,6 +24,7 @@ import repository.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class ExamplesLoader {
     private List<String> examples = new ArrayList<>();
@@ -337,30 +339,81 @@ public class ExamplesLoader {
         );
         this.addExample(example12);
 
-        // Example 13 : bool a; a = true; (If a Then v = 2 Else v = 3); Print(v)
-        // -- fails because v was not declared
-//        Statement example13 = new CompoundStatement(
-//                new VariableDeclarationStatement(new BoolType(), "a"),
-//                new CompoundStatement(
-//                        new AssignmentStatement("a", new ValueExpression(new BoolValue(true))),
-//                        new CompoundStatement(
-//                                new IfStatement(
-//                                        new VariableExpression("a"),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(3)))
-//                                ),
-//                                new PrintStatement(new VariableExpression("v"))
-//                        )
-//                )
-//
-//        );
-//        this.addExample(example13);
+        // Example 13 : Procedures
+        /*
+        procedure sum(a, b) int v; v=a+b; print(v)
+        procedure product(a, b) int v; v=a*b; print(v)
+
+        int v; int w; v = 2; w = 5;
+        call sum(v*10, w); print(v);
+        fork(
+            call product(v, w);
+            fork(
+                call sum(v, w);
+            );
+        );
+        => Out = {25, 2, 10, 7}
+         */
+        Statement example13 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new IntType(), "w"),
+                        new CompoundStatement(
+                                new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
+                                new CompoundStatement(
+                                        new AssignmentStatement("w", new ValueExpression(new IntValue(5))),
+                                        new CompoundStatement(
+                                                new CallProcedureStatement("sum", new ArrayList<Expression>(List.of(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), '*'), new VariableExpression("w")))),
+                                                new CompoundStatement(
+                                                        new PrintStatement(new VariableExpression("v")),
+                                                        new ForkStatement(
+                                                                new CompoundStatement(
+                                                                        new CallProcedureStatement("product", new ArrayList<Expression>(List.of(new VariableExpression("v"), new VariableExpression("w")))),
+                                                                        new ForkStatement(new CallProcedureStatement("sum", new ArrayList<Expression>(List.of(new VariableExpression("v"), new VariableExpression("w")))))
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+        example13.typeCheck(new ADTDictionary<>());
+
+        ProceduresTable example13_proceduresTable = new ProceduresTable();
+        example13_proceduresTable.addNewProcedure("sum", new ArrayList<String>(List.of("a", "b")), new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v"),
+                new CompoundStatement(
+                    new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), '+')),
+                    new PrintStatement(new VariableExpression("v"))
+                )
+        ));
+        example13_proceduresTable.addNewProcedure("product", new ArrayList<String>(List.of("a", "b")), new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v"),
+                new CompoundStatement(
+                    new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), '*')),
+                    new PrintStatement(new VariableExpression("v"))
+                )
+        ));
+
+        Stack<SymbolsTable> stack = new Stack<>();
+        stack.push(new SymbolsTable());
+
+        ProgramState state = new ProgramState(new ExecutionStack(), stack, new Output(), new FileTable(), new HeapTable(), example13_proceduresTable, example13);
+        IRepository repository = new Repository(state, "logFile_" + Integer.toString(this.examples.size() + 1) + ".txt");
+        IController controller = new Controller(repository, false);
+
+        this.examples.addLast(example13.toString());
+        this.controllers.addLast(controller);
     }
 
     private void addExample(Statement example) {
         example.typeCheck(new ADTDictionary<>());
 
-        ProgramState state = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example);
+        Stack<SymbolsTable> stack = new Stack<>();
+        stack.push(new SymbolsTable());
+
+        ProgramState state = new ProgramState(new ExecutionStack(), stack, new Output(), new FileTable(), new HeapTable(), new ProceduresTable(), example);
         IRepository repository = new Repository(state, "logFile_" + Integer.toString(this.examples.size() + 1) + ".txt");
         IController controller = new Controller(repository, false);
 

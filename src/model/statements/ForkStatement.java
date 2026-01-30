@@ -4,9 +4,11 @@ import exceptions.ProgramException;
 import model.adt.dictionary.IADTDictionary;
 import model.program_state.ExecutionStack;
 import model.program_state.ProgramState;
+import model.program_state.SymbolsTable;
 import model.types.Type;
 
 import java.util.Arrays;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class ForkStatement implements Statement {
@@ -18,12 +20,16 @@ public class ForkStatement implements Statement {
 
     @Override
     public ProgramState execute(ProgramState state) throws ProgramException {
+        Stack<SymbolsTable> copySymbolsTables = new Stack<>();
+        for (SymbolsTable s : state.getAllSymbolsTables()) copySymbolsTables.push(s.deepCopy());
+
         return new ProgramState(
                 new ExecutionStack(),
-                state.getSymbolsTable().deepCopy(),
+                copySymbolsTables,
                 state.getOutput(),
                 state.getFileTable(),
                 state.getHeapTable(),
+                state.getProceduresTable(),
                 this.statement);
     }
 

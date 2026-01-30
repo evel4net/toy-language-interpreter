@@ -55,7 +55,8 @@ public class Repository implements IRepository {
             logFile.print(programState.getExecutionStack().toLogFileString());
 
             logFile.println("SymbolsTable:");
-            logFile.print(programState.getSymbolsTable().toLogFileString());
+//            logFile.print(programState.getSymbolsTable().toLogFileString());
+            logFile.print(programState.getAllSymbolsTables().toString());
 
             logFile.println("Output:");
             logFile.print(programState.getOutput().toLogFileString());
@@ -64,7 +65,10 @@ public class Repository implements IRepository {
             logFile.print(programState.getFileTable().tologFileString());
 
             logFile.println("HeapTable:");
-            logFile.println(programState.getHeapTable().tologFileString());
+            logFile.print(programState.getHeapTable().tologFileString());
+
+            logFile.println("ProceduresTable:");
+            logFile.println(programState.getProceduresTable().tologFileString());
 
             logFile.flush();
             logFile.close();
