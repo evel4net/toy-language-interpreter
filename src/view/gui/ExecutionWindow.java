@@ -31,6 +31,15 @@ public class ExecutionWindow {
     private final TableColumn<Pair<Integer, String>, String> heapTableView_valueColumn = new TableColumn<>("Value");
 
     @FXML
+    private final TableView<Object[]> semaphoreTableView = new TableView<>();
+    @FXML
+    private final TableColumn<Object[], Object> semaphoreTableView_addressColumn = new TableColumn<>("Address");
+    @FXML
+    private final TableColumn<Object[], Object> semaphoreTableView_valueColumn = new TableColumn<>("Value");
+    @FXML
+    private final TableColumn<Object[], Object> semaphoreTableView_threadsColumn = new TableColumn<>("State IDs");
+
+    @FXML
     private final ListView<String> outputListView = new ListView<>();
     @FXML
     private final ListView<String> fileTableListView = new ListView<>();
@@ -126,6 +135,20 @@ public class ExecutionWindow {
 
         grid.add(fileTableText, 2, 1);
         grid.add(this.fileTableListView, 2, 2);
+
+        // SEMAPHORE TABLE
+        Text semaphoreTableText = new Text("Heap Table");
+
+        this.semaphoreTableView_addressColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue()[0]));
+        this.semaphoreTableView_valueColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue()[1]));
+        this.semaphoreTableView_threadsColumn.setCellValueFactory(cellData -> new SimpleObjectProperty(cellData.getValue()[2]));
+        this.semaphoreTableView.getColumns().addAll(this.semaphoreTableView_addressColumn, this.semaphoreTableView_valueColumn, semaphoreTableView_threadsColumn);
+        this.semaphoreTableView.setEditable(false);
+        this.semaphoreTableView.getSelectionModel().setCellSelectionEnabled(false);
+        this.semaphoreTableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+
+        grid.add(semaphoreTableText, 3, 1);
+        grid.add(this.semaphoreTableView, 3, 2);
 
         // PROGRAM STATES COUNT
         Text programStatesCountText = new Text("Program States Counter");
@@ -297,6 +320,7 @@ public class ExecutionWindow {
         this.loadHeapTable();
         this.loadOutput();
         this.loadFileTable();
+        this.loadSemaphoreTable();
 
         this.loadProgramStates();
 
@@ -308,6 +332,13 @@ public class ExecutionWindow {
 
         this.heapTableView.getItems().clear();
         heapTable.getContent().forEach((address, value) -> this.heapTableView.getItems().add(new Pair<>(address, value.toString())));
+    }
+
+    private void loadSemaphoreTable() {
+        SemaphoreTable semaphoreTable = this.currentProgramState.getSemaphoreTable();
+
+        this.semaphoreTableView.getItems().clear();
+        semaphoreTable.getContent().forEach((address, tuple) -> this.semaphoreTableView.getItems().add(new Object[]{address, tuple.first - tuple.third, tuple.second.toString()}));
     }
 
     private void loadOutput() {

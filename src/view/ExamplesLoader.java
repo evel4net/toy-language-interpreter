@@ -11,6 +11,9 @@ import model.statements.file_operations.OpenReadFileStatement;
 import model.statements.file_operations.ReadFileStatement;
 import model.statements.heap_operations.AllocateHeapStatement;
 import model.statements.heap_operations.WriteHeapStatement;
+import model.statements.semaphore_operations.AcquireSemaphoreStatement;
+import model.statements.semaphore_operations.NewSemaphoreStatement;
+import model.statements.semaphore_operations.ReleaseSemaphoreStatement;
 import model.types.BoolType;
 import model.types.IntType;
 import model.types.ReferenceType;
@@ -337,30 +340,77 @@ public class ExamplesLoader {
         );
         this.addExample(example12);
 
-        // Example 13 : bool a; a = true; (If a Then v = 2 Else v = 3); Print(v)
-        // -- fails because v was not declared
-//        Statement example13 = new CompoundStatement(
-//                new VariableDeclarationStatement(new BoolType(), "a"),
-//                new CompoundStatement(
-//                        new AssignmentStatement("a", new ValueExpression(new BoolValue(true))),
-//                        new CompoundStatement(
-//                                new IfStatement(
-//                                        new VariableExpression("a"),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
-//                                        new AssignmentStatement("v", new ValueExpression(new IntValue(3)))
-//                                ),
-//                                new PrintStatement(new VariableExpression("v"))
-//                        )
-//                )
-//
-//        );
-//        this.addExample(example13);
+        // Example 13: Toy Semaphore Mechanism
+        /*
+        Ref int v1; int cnt;
+        new(v1, 2); newSemaphore(cnt, rh(v1), 1);
+        fork(
+            acquire(cnt); wh(v1, rh(v1)*10); print(rh(v1)); release(cnt);
+        );
+        fork(
+            acquire(cnt); wh(v1, rh(v1)*10); wh(v1, rh(v1)*2); print(rh(v1)); release(cnt);
+        );
+        acquire(cnt); print(rh(v1)-1); release(cnt);
+        => Out = {20, 200, 199} or {20, 19, 200}
+         */
+
+        Statement example13 = new CompoundStatement(
+                new VariableDeclarationStatement(new ReferenceType(new IntType()), "v1"),
+                new CompoundStatement(
+                        new VariableDeclarationStatement(new IntType(), "cnt"),
+                        new CompoundStatement(
+                                new AllocateHeapStatement("v1", new ValueExpression(new IntValue(2))),
+                                new CompoundStatement(
+                                        new NewSemaphoreStatement("cnt", new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(1))),
+                                        new CompoundStatement(
+                                                new ForkStatement(
+                                                        new CompoundStatement(
+                                                                new AcquireSemaphoreStatement("cnt"),
+                                                                new CompoundStatement(
+                                                                        new WriteHeapStatement("v1", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), '*')),
+                                                                        new CompoundStatement(
+                                                                                new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))),
+                                                                                new ReleaseSemaphoreStatement("cnt")
+                                                                        )
+                                                                )
+                                                        )
+                                                ),
+                                                new CompoundStatement(
+                                                        new ForkStatement(
+                                                                new CompoundStatement(
+                                                                        new AcquireSemaphoreStatement("cnt"),
+                                                                        new CompoundStatement(
+                                                                                new WriteHeapStatement("v1", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(10)), '*')),
+                                                                                new CompoundStatement(
+                                                                                        new WriteHeapStatement("v1", new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(2)), '*')),
+                                                                                        new CompoundStatement(
+                                                                                                new PrintStatement(new ReadHeapExpression(new VariableExpression("v1"))),
+                                                                                                new ReleaseSemaphoreStatement("cnt")
+                                                                                        )
+                                                                                )
+                                                                        )
+                                                                )
+                                                        ),
+                                                        new CompoundStatement(
+                                                                new AcquireSemaphoreStatement("cnt"),
+                                                                new CompoundStatement(
+                                                                        new PrintStatement(new ArithmeticExpression(new ReadHeapExpression(new VariableExpression("v1")), new ValueExpression(new IntValue(1)), '-')),
+                                                                        new ReleaseSemaphoreStatement("cnt")
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example13);
     }
 
     private void addExample(Statement example) {
         example.typeCheck(new ADTDictionary<>());
 
-        ProgramState state = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), example);
+        ProgramState state = new ProgramState(new ExecutionStack(), new SymbolsTable(), new Output(), new FileTable(), new HeapTable(), new SemaphoreTable(), example);
         IRepository repository = new Repository(state, "logFile_" + Integer.toString(this.examples.size() + 1) + ".txt");
         IController controller = new Controller(repository, false);
 
