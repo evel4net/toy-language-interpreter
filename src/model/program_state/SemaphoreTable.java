@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SemaphoreTable {
+public class SemaphoreTable implements ISemaphoreTable {
     private Map<Integer, Pair<Integer, ArrayList<Integer>>> semaphoreTable = new ConcurrentHashMap<>();
     private int newFreeAddress = 1;
 
