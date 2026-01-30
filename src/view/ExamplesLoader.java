@@ -492,6 +492,19 @@ public class ExamplesLoader {
                 )
         );
         this.addExample(example16);
+
+        // Example 17: Wait Statement
+        Statement example17 = new CompoundStatement(
+                new VariableDeclarationStatement(new IntType(), "v"),
+                new CompoundStatement(
+                        new AssignmentStatement("v", new ValueExpression(new IntValue(20))),
+                        new CompoundStatement(
+                                new WaitStatement(10),
+                                new PrintStatement(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), '*'))
+                        )
+                )
+        );
+        this.addExample(example17);
     }
 
     private void addExample(Statement example) {
