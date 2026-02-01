@@ -12,14 +12,14 @@ import model.statements.Statement;
 import model.types.Type;
 import model.values.Value;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CallProcedureStatement implements Statement {
     private final String procedureName;
-    private final ArrayList<Expression> parameters;
+    private final List<Expression> parameters;
 
-    public CallProcedureStatement(String procedureName, ArrayList<Expression> parameters) {
+    public CallProcedureStatement(String procedureName, List<Expression> parameters) {
         this.procedureName = procedureName;
         this.parameters = parameters;
     }
@@ -30,12 +30,14 @@ public class CallProcedureStatement implements Statement {
 
         if (!proceduresTable.existsProcedure(this.procedureName)) throw new ProgramException("Procedure " + this.procedureName + " does not exist.");
 
-        Pair<ArrayList<String>, Statement> procedureData = proceduresTable.getPair(this.procedureName);
-        ArrayList<String> formalParameters = procedureData.getKey();
+        Pair<List<String>, Statement> procedureData = proceduresTable.getPair(this.procedureName);
+        List<String> formalParameters = procedureData.getKey();
+
+        if (formalParameters.size() != this.parameters.size()) throw new ProgramException("Actual and formal parameters number do not correspond for procedure " + this.procedureName + ".");
 
         SymbolsTable symbolsTable = state.getSymbolsTable();
         HeapTable heapTable = state.getHeapTable();
-        ArrayList<Value> parametersValues = new ArrayList<>();
+        List<Value> parametersValues = new ArrayList<>();
         for (Expression e : this.parameters) parametersValues.add(e.evaluate(symbolsTable, heapTable));
 
         SymbolsTable procedureSymbolsTable = new SymbolsTable();

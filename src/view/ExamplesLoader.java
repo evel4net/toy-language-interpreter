@@ -12,6 +12,7 @@ import model.statements.file_operations.ReadFileStatement;
 import model.statements.heap_operations.AllocateHeapStatement;
 import model.statements.heap_operations.WriteHeapStatement;
 import model.statements.procedure_operations.CallProcedureStatement;
+import model.statements.procedure_operations.DeclareProcedureStatement;
 import model.types.BoolType;
 import model.types.IntType;
 import model.types.ReferenceType;
@@ -405,6 +406,51 @@ public class ExamplesLoader {
 
         this.examples.addLast(example13.toString());
         this.controllers.addLast(controller);
+
+        // Example 14: Procedure using DeclareStatement
+        Statement example14 = new CompoundStatement(
+                new DeclareProcedureStatement("sum", List.of("a", "b"), new CompoundStatement(
+                        new VariableDeclarationStatement(new IntType(), "v"),
+                        new CompoundStatement(
+                                new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), '+')),
+                                new PrintStatement(new VariableExpression("v"))
+                        ))
+                ),
+                new CompoundStatement(
+                        new DeclareProcedureStatement("product", List.of("a", "b"), new CompoundStatement(
+                                new VariableDeclarationStatement(new IntType(), "v"),
+                                new CompoundStatement(
+                                        new AssignmentStatement("v", new ArithmeticExpression(new VariableExpression("a"), new VariableExpression("b"), '*')),
+                                        new PrintStatement(new VariableExpression("v"))
+                                ))
+                        ),
+                        new CompoundStatement(
+                                new VariableDeclarationStatement(new IntType(), "v"),
+                                new CompoundStatement(
+                                        new VariableDeclarationStatement(new IntType(), "w"),
+                                        new CompoundStatement(
+                                                new AssignmentStatement("v", new ValueExpression(new IntValue(2))),
+                                                new CompoundStatement(
+                                                        new AssignmentStatement("w", new ValueExpression(new IntValue(5))),
+                                                        new CompoundStatement(
+                                                                new CallProcedureStatement("sum", new ArrayList<Expression>(List.of(new ArithmeticExpression(new VariableExpression("v"), new ValueExpression(new IntValue(10)), '*'), new VariableExpression("w")))),
+                                                                new CompoundStatement(
+                                                                        new PrintStatement(new VariableExpression("v")),
+                                                                        new ForkStatement(
+                                                                                new CompoundStatement(
+                                                                                        new CallProcedureStatement("product", new ArrayList<Expression>(List.of(new VariableExpression("v"), new VariableExpression("w")))),
+                                                                                        new ForkStatement(new CallProcedureStatement("sum", new ArrayList<Expression>(List.of(new VariableExpression("v"), new VariableExpression("w")))))
+                                                                                )
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                )
+        );
+        this.addExample(example14);
     }
 
     private void addExample(Statement example) {

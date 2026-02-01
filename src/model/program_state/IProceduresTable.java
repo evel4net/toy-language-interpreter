@@ -5,14 +5,14 @@ import model.adt.dictionary.KeyNotDefinedException;
 import model.statements.Statement;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public interface IProceduresTable {
-    void addNewProcedure(String name, ArrayList<String> formalParameters, Statement body) throws KeyAlreadyExistsException;
-    Pair<ArrayList<String>, Statement> getPair(String procedure) throws KeyNotDefinedException;
+    void addNewProcedure(String name, List<String> formalParameters, Statement body) throws KeyAlreadyExistsException;
+    Pair<List<String>, Statement> getPair(String procedure) throws KeyNotDefinedException;
     boolean existsProcedure(String procedure);
-    Map<String, Pair<ArrayList<String>, Statement>> getContent();
+    Map<String, Pair<List<String>, Statement>> getContent();
 
     String toString();
     String tologFileString();
