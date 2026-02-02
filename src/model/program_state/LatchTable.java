@@ -20,8 +20,7 @@ public class LatchTable implements ILatchTable {
         return entryAddress;
     }
 
-    @Override
-    public void countDown(int address) throws KeyNotDefinedException {
+    public synchronized void countDown(int address) throws KeyNotDefinedException {
         if (!this.existsAddress(address)) throw new KeyNotDefinedException(Integer.toString(address));
 
         int oldValue = this.latchTable.get(address);
