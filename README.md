@@ -1,6 +1,4 @@
 # Toy Language Interpreter
-*Note: Project in progress*
-
 A toy language interpreter implemented in **Java** for the **Advanced Programming Methods** course at *Babeș-Bolyai University* during the first semester of the second year (2025-2026).
 The graphical user interface (GUI) is developed using the **JavaFX SDK**.
 
